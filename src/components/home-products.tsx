@@ -135,26 +135,26 @@ export function HomeProducts({ categories, products, collections }: Props) {
   return (
     <>
       <section className="lg:mx-auto lg:w-full lg:max-w-7xl lg:px-8 md:my-2">
-        <div className="flex gap-3 overflow-hidden relative">
-          <div className="flex gap-3 animate-scroll scrollbar-hide">
+        <div className="flex gap-6 overflow-hidden relative">
+          <div className="flex gap-6 animate-scroll scrollbar-hide">
              {[...categories, ...categories].map((category, idx) => (
                <Link
                  key={`${category.id}-${idx}`}
                  href="/products"
                  className="group flex flex-col items-center flex-shrink-0"
                >
-                <div className="relative h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 overflow-hidden rounded-full border-2 border-[#d8a928]/30 shadow-sm transition hover:border-[#d8a928] hover:shadow-md">
+                <div className="relative h-24 w-24 sm:h-28 sm:w-28 lg:h-32 lg:w-32">
                   <Image
                     src={category.image || FALLBACK_IMAGE}
                     alt={category.name}
                     fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-110"
+                    className="object-contain transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
-                 <span className="mt-1 sm:mt-2 text-center text-xs font-semibold text-[#0a0a0a]">{category.name}</span>
+                 <span className="mt-2 sm:mt-3 text-center text-xs font-bold uppercase text-[#0a0a0a]">{category.name}</span>
                </Link>
              ))}
-          </div>
+           </div>
         </div>
       </section>
 

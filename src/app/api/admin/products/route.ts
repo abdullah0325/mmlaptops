@@ -19,8 +19,8 @@ const productSchema = z.object({
   images: z.array(z.string()).min(1, "At least one image is required"),
   featuredImage: z.string().optional(),
   productType: z.string().optional(),
-  categoryId: z.string().min(1, "Category is required"),
-  subcategoryId: z.string().min(1, "Subcategory is required"),
+  categoryId: z.string().optional(),
+  subcategoryId: z.string().optional(),
   vendor: z.string().default("MM Laptop Center"),
   tags: z.array(z.string()).default([]),
   collectionIds: z.array(z.string()).default([]),
@@ -103,6 +103,9 @@ export async function POST(request: Request) {
     const validated = productSchema.parse(body);
 
     const { variations, details, certificates, ...productData } = validated;
+
+    if (!productData.categoryId) delete (productData as any).categoryId;
+    if (!productData.subcategoryId) delete (productData as any).subcategoryId;
 
     const product = await prisma.product.create({
       data: {

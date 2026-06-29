@@ -27,31 +27,31 @@ export type ProductCertificate = {
 };
 
 export type ProductFormValues = {
-  title: string;
-  handle: string;
-  description?: string;
-  descriptionHtml?: string;
-  price: number;
-  compareAtPrice?: number | null;
-  sku?: string;
-  inventory: number;
-  availableForSale: boolean;
-  status: ProductStatus;
-  seoTitle?: string;
-  seoDescription?: string;
-  images: string[];
-  featuredImage?: string;
-  productType?: string;
-  categoryId: string;
-  subcategoryId: string;
-  vendor?: string;
-  tags: string[];
-  collectionIds: string[];
-  isFeatured: boolean;
-  variations: Array<{ name: string; value: string; price: number }>;
-  details: ProductDetail[];
-  certificates: ProductCertificate[];
-};
+   title: string;
+   handle: string;
+   description?: string;
+   descriptionHtml?: string;
+   price: number;
+   compareAtPrice?: number | null;
+   sku?: string;
+   inventory: number;
+   availableForSale: boolean;
+   status: ProductStatus;
+   seoTitle?: string;
+   seoDescription?: string;
+   images: string[];
+   featuredImage?: string;
+   productType?: string;
+   categoryId?: string;
+   subcategoryId?: string;
+   vendor?: string;
+   tags: string[];
+   collectionIds: string[];
+   isFeatured: boolean;
+   variations: Array<{ name: string; value: string; price: number }>;
+   details: ProductDetail[];
+   certificates: ProductCertificate[];
+ };
 
 function slugifyHandle(input: string) {
   return input.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");

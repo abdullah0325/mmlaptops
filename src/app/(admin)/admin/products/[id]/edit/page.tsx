@@ -46,6 +46,7 @@ export default function EditProductPage() {
           vendor: data.vendor ?? "MM Laptop Center",
           tags: Array.isArray(data.tags) ? data.tags : [],
           collectionIds: Array.isArray(data.collectionIds) ? data.collectionIds : [],
+          isFeatured: data.isFeatured ?? false,
         });
       } catch (e: any) {
         if (!cancelled) setError(e?.message || "Failed to load product");

@@ -37,8 +37,10 @@ export async function POST(request: Request) {
     await requireAdmin();
     const body = await request.json();
     const validated = categorySchema.parse(body);
-    const category = await prisma.category.create({
-      data: validated,
+    const category = await prisma.category.upsert({
+      where: { slug: validated.slug },
+      update: validated,
+      create: validated,
     });
     return NextResponse.json({ category }, { status: 201 });
   } catch (error: unknown) {
@@ -47,6 +49,13 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "Validation failed", details: error.issues },
         { status: 400 }
+      );
+    }
+    const err = error as { code?: string };
+    if (err.code === "P2002") {
+      return NextResponse.json(
+        { error: "A category with this name or slug already exists" },
+        { status: 409 }
       );
     }
     return NextResponse.json(
