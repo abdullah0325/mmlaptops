@@ -1,5 +1,7 @@
 import { getPolicyContent } from "@/lib/site-settings";
 
+export const dynamic = "force-dynamic";
+
 export default async function TermsPage() {
     const policy = await getPolicyContent("termsOfService", {
         title: "Terms and Conditions",

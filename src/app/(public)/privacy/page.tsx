@@ -1,5 +1,7 @@
 import { getPolicyContent } from "@/lib/site-settings";
 
+export const dynamic = "force-dynamic";
+
 export default async function PrivacyPage() {
     const policy = await getPolicyContent("privacyPolicy", {
         title: "Privacy Policy",
