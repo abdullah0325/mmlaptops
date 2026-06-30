@@ -49,7 +49,7 @@ export async function getAllHeroSlides(): Promise<HeroSlide[]> {
 }
 
 export async function createHeroSlide(
-  slide: Omit<HeroSlide, "id">,
+  slide: Omit<HeroSlide, "id" | "order">,
 ): Promise<HeroSlide> {
   const slides = await readData();
   const maxOrder = Math.max(0, ...slides.map((s) => s.order));

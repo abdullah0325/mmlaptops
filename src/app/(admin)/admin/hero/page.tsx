@@ -11,10 +11,10 @@ interface SlideFormValues {
   title: string;
   titleHighlight: string;
   description: string;
-  ctaPrimaryLabel: string;
-  ctaPrimaryHref: string;
-  ctaSecondaryLabel: string;
-  ctaSecondaryHref: string;
+  ctaPrimaryLabel?: string;
+  ctaPrimaryHref?: string;
+  ctaSecondaryLabel?: string;
+  ctaSecondaryHref?: string;
   isActive: boolean;
 }
 
@@ -32,10 +32,10 @@ export default function HeroAdminPage() {
     title: "",
     titleHighlight: "",
     description: "",
-    ctaPrimaryLabel: "",
-    ctaPrimaryHref: "",
-    ctaSecondaryLabel: "",
-    ctaSecondaryHref: "",
+    ctaPrimaryLabel: undefined,
+    ctaPrimaryHref: undefined,
+    ctaSecondaryLabel: undefined,
+    ctaSecondaryHref: undefined,
     isActive: true,
   });
 
@@ -189,10 +189,10 @@ export default function HeroAdminPage() {
       title: "",
       titleHighlight: "",
       description: "",
-      ctaPrimaryLabel: "",
-      ctaPrimaryHref: "",
-      ctaSecondaryLabel: "",
-      ctaSecondaryHref: "",
+      ctaPrimaryLabel: undefined,
+      ctaPrimaryHref: undefined,
+      ctaSecondaryLabel: undefined,
+      ctaSecondaryHref: undefined,
       isActive: true,
     });
     setShowForm(false);

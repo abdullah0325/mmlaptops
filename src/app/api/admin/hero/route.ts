@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAllHeroSlides, createHeroSlide, getActiveHeroSlides } from "@/lib/hero-service";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin-auth";
+import { HeroSlide } from "@/types/hero";
 
 const heroSlideSchema = z.object({
   imageUrl: z.string().min(1),
@@ -16,6 +17,8 @@ const heroSlideSchema = z.object({
   ctaSecondaryHref: z.string().optional(),
   isActive: z.boolean().default(true),
 });
+
+type HeroSlideInput = Omit<HeroSlide, "id" | "order">;
 
 export async function GET(request: NextRequest) {
   try {
