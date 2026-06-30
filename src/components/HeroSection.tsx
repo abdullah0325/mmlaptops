@@ -1,5 +1,5 @@
-import HeroCarousel from "@/components/HeroCarousel";
 import { getActiveHeroSlides } from "@/lib/hero-service";
+import HeroCarousel from "@/components/HeroCarousel";
 
 export const dynamic = "force-dynamic";
 
