@@ -23,44 +23,32 @@ export default function EssenceSection({ initialData }: EssenceSectionProps) {
     subtitle: string;
     cards: EssenceCard[];
   }>({
-    title: "Experience the Essence",
-    subtitle: "Elevate Your Culinary & Wellness Rituals",
-    cards: [
-      {
-        title: "Power Your Work",
-        description: "Business laptops built for productivity and reliability.",
-        image: "/graphics/about-one.png",
-      },
-      {
-        title: "Dominate the Game",
-        description: "High-refresh gaming laptops with the latest GPUs.",
-        image: "/graphics/about-two.png",
-      },
-    ],
+    title: "Your Trusted Tech Destination",
+    subtitle: "Premium laptops and accessories for work, gaming, and everyday life.",
+    cards: [],
   });
 
   useEffect(() => {
     if (initialData && initialData.content && initialData.content.length > 0) {
       setData({
-        title: initialData.title || "Experience the Essence",
-        subtitle: initialData.subtitle || "Elevate Your Culinary & Wellness Rituals",
+        title: initialData.title || "Your Trusted Tech Destination",
+        subtitle: initialData.subtitle || "Premium laptops and accessories for work, gaming, and everyday life.",
         cards: initialData.content,
       });
     }
   }, [initialData]);
 
-  if (data.cards.length === 0) return null;
-
   return (
     <section className="max-w-6xl mx-auto px-4 py-16 font-sans text-gray-800">
-      <div className="text-center mb-16">
-        <h2 className="text-4xl font-light mb-2">{data.title}</h2>
-        <p className="text-gray-500 uppercase tracking-widest text-sm">
+      <div className="text-center mb-6">
+        <h2 className="text-3xl font-bold tracking-tight text-[#0a0a0a]">{data.title}</h2>
+        <p className="mt-3 text-base text-[#5A5E55] max-w-2xl mx-auto">
           {data.subtitle}
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 mb-24">
+      {data.cards.length > 0 && (
+        <div className="grid md:grid-cols-2 gap-8 mb-20">
         {data.cards.map((item, index) => (
           <div
             key={index}
@@ -85,6 +73,7 @@ export default function EssenceSection({ initialData }: EssenceSectionProps) {
           </div>
         ))}
       </div>
+      )}
 
       <div className="relative flex flex-col md:flex-row items-center">
         <div className="bg-[#C99688] text-white p-10 md:p-16 md:w-1/2 md:absolute left-0 z-10">

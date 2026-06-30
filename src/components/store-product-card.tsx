@@ -152,7 +152,7 @@ export function StoreProductCard({
   };
 
   return (
-    <div className="group relative flex flex-col rounded-2xl bg-[#f5f5f5] overflow-hidden transition-shadow duration-200 hover:shadow-lg">
+    <div className="group relative flex flex-col rounded-2xl bg-white overflow-hidden transition-shadow duration-200 hover:shadow-lg">
 
       {/* ── Tag badge ─────────────────────────────────────── */}
       {tag && (
@@ -175,7 +175,7 @@ export function StoreProductCard({
       {/* ── Product image ──────────────────────────────────── */}
       <Link
         href={`/products/${handle}`}
-        className="block relative aspect-square w-full overflow-hidden bg-[#f5f5f5]"
+        className="block relative aspect-square w-full overflow-hidden bg-white"
         onMouseEnter={() => setIsImageHovered(true)}
         onMouseLeave={() => setIsImageHovered(false)}
         onFocus={() => setIsImageHovered(true)}

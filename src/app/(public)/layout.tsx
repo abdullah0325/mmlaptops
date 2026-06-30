@@ -7,10 +7,10 @@ import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col font-sans">
+    <div className="flex min-h-screen flex-col">
       <Header />
       <SiteLoader />
-        <main className="flex-grow pb-16 md:pb-0">{children}</main>
+        <main className="flex-grow pb-16 md:pb-0 bg-[#f5f5f5]">{children}</main>
       <Footer />
       <MobileBottomNav />
       <ChatIntegrations />

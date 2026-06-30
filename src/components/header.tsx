@@ -11,9 +11,14 @@ import {
 } from "@esmate/shadcn/components/ui/sheet";
 import {
   ChevronDown,
+  Heart,
   Menu,
+  Phone,
   Search,
+  ShieldCheck,
   ShoppingCart,
+  Truck,
+  User,
 } from "@esmate/shadcn/pkgs/lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,6 +34,18 @@ const mainMenuItems = [
   { text: "Deals", href: "/collections/hot-deals" },
   { text: "About", href: "/about-us" },
   { text: "Contact", href: "/contact" },
+];
+
+const topBarLeft = [
+  { icon: Truck, text: "Free Shipping on Orders Over $150" },
+  { icon: ShieldCheck, text: "100% Secure Checkout" },
+];
+
+const topBarRight = [
+  { text: "About", href: "/about-us" },
+  { text: "Reviews", href: "/reviews" },
+  { text: "Store Locator", href: "/store-locator" },
+  { text: "FAQs", href: "/faqs" },
 ];
 
 const logoSrc = "/logo/mmlaptop.png";
@@ -81,8 +98,42 @@ export function Header() {
   }, [searchQuery]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#d8a928]/45 bg-[#fff7df] shadow-sm">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center px-4 lg:h-20 lg:px-8">
+    <header className="sticky top-0 z-40 border-b border-[#d8a928]/45 bg-[#f4f1e8] shadow-sm">
+      {/* ───────── top announcement bar ───────── */}
+      <div className="hidden bg-[#1a1308] text-white lg:block">
+        <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-8 text-xs">
+          <div className="flex items-center gap-6">
+            {topBarLeft.map((item) => (
+              <span key={item.text} className="flex items-center gap-2 font-medium">
+                <item.icon className="h-3.5 w-3.5 text-[#f6a45d]" />
+                {item.text}
+              </span>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-6">
+            {topBarRight.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="font-medium text-white/85 transition-colors hover:text-[#f6a45d]"
+              >
+                {item.text}
+              </Link>
+            ))}
+            <Link
+              href="/contact"
+              className="flex items-center gap-1.5 font-medium text-white/85 transition-colors hover:text-[#f6a45d]"
+            >
+              <Phone className="h-3.5 w-3.5" />
+              Contact
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ───────── main nav ───────── */}
+      <nav className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 lg:h-20 lg:gap-6 lg:px-8">
         <div className="lg:hidden">
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -215,8 +266,9 @@ export function Header() {
           </Sheet>
         </div>
 
-        <Link href="/" className="flex flex-1 justify-center">
-          <div className="relative h-16 w-[160px] lg:h-28 lg:w-[170px]">
+        {/* ───────── logo — kept tight to the left edge ───────── */}
+        <Link href="/" className="flex shrink-0 items-center">
+          <div className="relative h-10 w-[120px] lg:h-12 lg:w-[140px]">
             <Image
               src={logoSrc}
               alt="MM Laptop Center"
@@ -227,7 +279,7 @@ export function Header() {
           </div>
         </Link>
 
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-2 lg:hidden ml-auto">
           <Button
             variant="ghost"
             size="icon"
@@ -252,15 +304,40 @@ export function Header() {
           </Button>
         </div>
 
-        <div className="hidden items-center gap-6 lg:flex">
+        {/* ───────── nav links ───────── */}
+        <div className="hidden items-center gap-5 lg:flex">
           <Link
             href="/"
-            className={`text-sm font-semibold transition-colors hover:text-[#b57910] ${
+            className={`flex items-center gap-1.5 text-sm font-semibold transition-colors hover:text-[#b57910] ${
               pathname === "/" ? "text-[#8a5b00]" : "text-[#1a1308]"
             }`}
           >
             Home
           </Link>
+
+          <div className="relative">
+            <Link
+              href="/collections/new-arrivals"
+              className="text-sm font-semibold text-[#1a1308] transition-colors hover:text-[#b57910]"
+            >
+              New Arrivals
+            </Link>
+            <span className="absolute -right-3 -top-2.5 rounded-full bg-emerald-500 px-1.5 py-[1px] text-[8px] font-bold uppercase leading-tight tracking-wide text-white shadow-sm">
+              New
+            </span>
+          </div>
+
+          <div className="relative">
+            <Link
+              href="/collections/best-sellers"
+              className="text-sm font-semibold text-[#1a1308] transition-colors hover:text-[#b57910]"
+            >
+              Best Sellers
+            </Link>
+            <span className="absolute -right-3 -top-2.5 rounded-full bg-rose-500 px-1.5 py-[1px] text-[8px] font-bold uppercase leading-tight tracking-wide text-white shadow-sm">
+              Hot
+            </span>
+          </div>
 
           <div className="relative">
             <div className="group">
@@ -273,7 +350,7 @@ export function Header() {
                       : "text-[#1a1308]"
                   }`}
                 >
-                  Products
+                  Categories
                 </Link>
                 <ChevronDown className="h-4 w-4 text-[#7a6333] transition-transform duration-200 group-hover:rotate-180" />
               </div>
@@ -293,7 +370,7 @@ export function Header() {
                             : ""
                         }`}
                       >
-                        <div className="relative mb-2 h-14 w-14 overflow-hidden rounded-full border border-[#d8a928]/25">
+                        <div className="relative mb-2 h-14 w-14 overflow-hidden rounded-lg">
                           <Image
                             src={item.image || logoSrc}
                             alt={item.name}
@@ -318,7 +395,7 @@ export function Header() {
                     ))}
                   </div>
 
-                  <div className="border-t border-[#d8a928]/20 bg-[#fcf5e8]/40 p-3">
+                  <div className="border-t border-gray-200 bg-white p-3">
                     <Link
                       href="/products"
                       className="flex items-center justify-center gap-1.5 text-xs font-semibold text-[#5A5E55] transition-colors hover:text-[#f6a45d]"
@@ -332,59 +409,44 @@ export function Header() {
             </div>
           </div>
 
-          {mainMenuItems
-            .filter((i) => i.text !== "Home")
-            .map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`text-sm font-semibold transition-colors hover:text-[#b57910] ${
-                  isActive(item.href) ? "text-[#8a5b00]" : "text-[#1a1308]"
-                }`}
-              >
-                {item.text}
-              </Link>
-            ))}
+          <div className="relative">
+            <Link
+              href="/collections/hot-deals"
+              className={`text-sm font-semibold transition-colors hover:text-[#b57910] ${
+                isActive("/collections/hot-deals")
+                  ? "text-[#8a5b00]"
+                  : "text-[#1a1308]"
+              }`}
+            >
+              Sale
+            </Link>
+            <span className="absolute -right-3 -top-2.5 rounded-full bg-amber-500 px-1.5 py-[1px] text-[8px] font-bold uppercase leading-tight tracking-wide text-white shadow-sm">
+              Sale
+            </span>
+          </div>
         </div>
 
-        <div className="relative hidden flex-1 justify-end gap-3 lg:flex">
-          <div className="relative">
-            {searchOpen ? (
-              <div className="absolute right-0 top-0 z-50 flex w-64 items-center overflow-hidden rounded-lg border-2 border-[#d8a928]/30 bg-white shadow-sm transition-all">
-                <Search className="ml-3 h-4 w-4 shrink-0 text-[#5A5E55]" />
-                <input
-                  type="search"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onBlur={() => {
-                    setTimeout(() => setSearchOpen(false), 150);
-                  }}
-                  onFocus={() => setSearchOpen(true)}
-                  className="flex-1 bg-transparent px-3 py-2 text-sm text-[#0a0a0a] outline-none placeholder:text-[#5A5E55]/60"
-                  autoFocus
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => {
-                      setSearchQuery("");
-                      setSearchResults([]);
-                    }}
-                    className="shrink-0 px-2 text-[#5A5E55] hover:text-[#0a0a0a]"
-                  >
-                    <Search className="h-4 w-4 rotate-90" />
-                  </button>
-                )}
-              </div>
-            ) : (
+        {/* ───────── search + icons ───────── */}
+        <div className="hidden flex-1 items-center justify-end gap-3 lg:flex">
+          <div className="relative w-full max-w-xs">
+            <div className="flex items-center overflow-hidden rounded-full border border-[#d8a928]/30 bg-white shadow-sm">
+              <Search className="ml-4 h-4 w-4 shrink-0 text-[#5A5E55]" />
+              <input
+                type="search"
+                placeholder="Search for laptops..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setSearchOpen(true)}
+                onBlur={() => setTimeout(() => setSearchOpen(false), 150)}
+                className="flex-1 bg-transparent px-3 py-2.5 text-sm text-[#0a0a0a] outline-none placeholder:text-[#5A5E55]/60"
+              />
               <button
                 onClick={() => setSearchOpen(true)}
-                aria-label="Search"
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#d8a928]/20 bg-[#fcf5e8] transition-colors hover:border-[#d8a928]/40"
+                className="m-1 shrink-0 rounded-full bg-gradient-to-r from-[#f6a45d] to-[#d8a928] px-4 py-2 text-xs font-bold text-white transition-opacity hover:opacity-90"
               >
-                <Search className="h-4 w-4 text-[#5A5E55]" />
+                Search
               </button>
-            )}
+            </div>
 
             {searchOpen && searchQuery && (
               <div className="absolute right-0 top-full z-50 mt-2 max-h-80 w-80 overflow-hidden overflow-y-auto rounded-lg border border-[#d8a928]/20 bg-white shadow-lg">
@@ -438,6 +500,14 @@ export function Header() {
             variant="ghost"
             size="icon"
             className="relative h-10 w-10 text-[#1a1308] hover:text-[#b57910]"
+          >
+            <Heart className="h-5 w-5" />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative h-10 w-10 text-[#1a1308] hover:text-[#b57910]"
             onClick={() => setCartOpen(true)}
           >
             <ShoppingCart className="h-5 w-5" />
@@ -447,6 +517,21 @@ export function Header() {
               </Badge>
             )}
           </Button>
+
+          <div className="flex items-center gap-2 pl-1">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#f6a45d] to-[#d8a928] text-white">
+              <User className="h-4 w-4" />
+            </div>
+            <div className="leading-tight">
+              <p className="text-xs font-semibold text-[#1a1308]">Account</p>
+              <Link
+                href="/login"
+                className="text-[11px] text-[#5A5E55] hover:text-[#b57910]"
+              >
+                Sign in
+              </Link>
+            </div>
+          </div>
         </div>
       </nav>
 

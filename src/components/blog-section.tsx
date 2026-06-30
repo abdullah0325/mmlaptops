@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Calendar } from "@esmate/shadcn/pkgs/lucide-react"
@@ -25,21 +24,9 @@ interface BlogSectionProps {
 }
 
 export default function BlogSection({ articles: initialArticles }: BlogSectionProps) {
-  const [articles] = useState<Article[]>(initialArticles || [])
-  const [activeIndex, setActiveIndex] = useState(0)
-
-  useEffect(() => {
-    if (articles.length <= 1) return
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % articles.length)
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [articles.length])
+  const articles = initialArticles || []
 
   if (!articles.length) return null
-
-  const currentArticle = articles[activeIndex]
-  const text = currentArticle.content?.replace(/<[^>]+>/g, "").trim() ?? ""
 
   return (
     <section className="py-20 sm:py-28">
@@ -54,74 +41,68 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
           </p>
         </div>
 
-        {/* Single Blog Slider */}
-        <div className="mt-14 max-w-4xl mx-auto">
-          <div className="relative overflow-hidden rounded-2xl bg-background shadow-sm">
-            <div className="relative aspect-[16/9]">
-              {currentArticle.image?.url ? (
-                <Image
-                  src={currentArticle.image.url}
-                  alt={currentArticle.image.altText || currentArticle.title}
-                  fill
-                  className="object-cover"
-                  key={currentArticle.id}
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center bg-muted text-muted-foreground">
-                  No image
-                </div>
-              )}
-            </div>
+        {/* Two-column grid on laptop/desktop */}
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-8">
+          {articles.map((article) => {
+            const text = article.content?.replace(/<[^>]+>/g, "").trim() ?? ""
 
-            <div className="p-6 sm:p-8">
-              <time className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Calendar className="h-3 w-3" />
-                {currentArticle.publishedAt ? new Date(currentArticle.publishedAt).toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                }) : ""}
-              </time>
-
-              <h3 className="mt-3 text-xl sm:text-2xl font-semibold leading-snug">
-                <Link
-                  href={`/blogs/${currentArticle.blogHandle}/${currentArticle.handle}`}
-                  className="hover:text-primary"
-                >
-                  {currentArticle.title}
-                </Link>
-              </h3>
-
-              <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">
-                {text}
-              </p>
-
-              <Link
-                href={`/blogs/${currentArticle.blogHandle}/${currentArticle.handle}`}
-                className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary"
+            return (
+              <div
+                key={article.id}
+                className="group relative overflow-hidden rounded-2xl bg-background shadow-sm transition-shadow hover:shadow-md"
               >
-                Read article <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
+                {/* Image: object-contain keeps the full image visible, no heavy crop */}
+                <div className="relative aspect-[4/3] bg-gray-50">
+                  {article.image?.url ? (
+                    <Image
+                      src={article.image.url}
+                      alt={article.image.altText || article.title}
+                      fill
+                      className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                      sizes="(min-width: 1024px) 50vw, (min-width: 768px) 50vw, 100vw"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-muted-foreground">
+                      No image
+                    </div>
+                  )}
+                </div>
 
-          {/* Dots Indicator */}
-          {articles.length > 1 && (
-            <div className="mt-6 flex justify-center gap-2">
-              {articles.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveIndex(index)}
-                  className={`h-2 rounded-full transition-all ${
-                    index === activeIndex
-                      ? "w-6 bg-[#f6a45d]"
-                      : "w-2 bg-gray-300"
-                  }`}
-                  aria-label={`Go to article ${index + 1}`}
-                />
-              ))}
-            </div>
-          )}
+                <div className="p-6 sm:p-8">
+                  <time className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Calendar className="h-3 w-3" />
+                    {article.publishedAt
+                      ? new Date(article.publishedAt).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                      : ""}
+                  </time>
+
+                  <h3 className="mt-3 text-xl sm:text-2xl font-semibold leading-snug">
+                    <Link
+                      href={`/blogs/${article.blogHandle}/${article.handle}`}
+                      className="hover:text-primary"
+                    >
+                      {article.title}
+                    </Link>
+                  </h3>
+
+                  <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">
+                    {text}
+                  </p>
+
+                  <Link
+                    href={`/blogs/${article.blogHandle}/${article.handle}`}
+                    className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary"
+                  >
+                    Read article <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            )
+          })}
         </div>
 
         {/* CTA */}

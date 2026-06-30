@@ -5,6 +5,12 @@ import { FiEdit, FiStar, FiAward, FiFileText } from "react-icons/fi";
 
 const sections = [
   {
+    name: "Hero Slides",
+    description: "Manage homepage carousel slides",
+    href: "/admin/hero",
+    icon: FiFileText,
+  },
+  {
     name: "Experience the Essence",
     description: "Manage the Essence section content with 2 cards",
     href: "/admin/homepage",

@@ -3,7 +3,7 @@ import { Laptop, Gamepad2, Briefcase } from "@esmate/shadcn/pkgs/lucide-react";
 import BlogSection from "@/components/blog-section";
 import EssenceSection from "@/components/EssenceSection";
 import Testimonials from "@/components/Testimonials";
-import Hero from "@/components/Hero";
+import HeroSection from "@/components/HeroSection";
 import { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { HomeProducts } from "@/components/home-products";
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const [categories, featuredProducts, featuredCollections, featuredBlogs, essenceSection, featuredReviews] = await Promise.all([
+  const [categories, featuredProducts, featuredCollections, featuredBlogs, essenceSection] = await Promise.all([
     safeHomeQuery(
       "categories",
       () => prisma.category.findMany({
@@ -121,16 +121,7 @@ export default async function Page() {
       }),
       null,
     ),
-    safeHomeQuery(
-      "featured reviews",
-      () => prisma.review.findMany({
-        where: { isFeatured: true, status: "approved" },
-        orderBy: { createdAt: "desc" },
-        take: 10,
-        select: { id: true, authorName: true, rating: true, content: true },
-      }),
-      [],
-    ),
+
   ]);
 
 return (
@@ -139,8 +130,8 @@ return (
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-      <div className="flex flex-col gap-4 bg-[#fcf5e8]">
-        <Hero />
+      <div className="flex flex-col gap-4 bg-gray-50">
+        <HeroSection />
         <h1 className="sr-only">MM Laptop Center – Premium Laptops, Gaming Gear & Tech Accessories</h1>
        <HomeProducts categories={categories} products={featuredProducts} collections={featuredCollections} />
 
@@ -203,38 +194,8 @@ return (
         </div>
        </section>
 
-       {/* Essence */}
-      <EssenceSection initialData={essenceSection ? {
-        title: essenceSection.title,
-        subtitle: essenceSection.subtitle,
-        content: essenceSection.content as any,
-      } : undefined} />
 
-      {/* Reviews */}
-      {featuredReviews && featuredReviews.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tight text-[#0a0a0a] sm:text-4xl">
-              What Our Customers Say
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredReviews.map((review) => (
-              <div key={review.id} className="bg-white rounded-xl p-6 border border-[#d8a928]/20">
-                <div className="flex gap-1 mb-3">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <span key={i} className={`text-lg ${i < review.rating ? "text-[#d8a928]" : "text-gray-200"}`}>★</span>
-                  ))}
-                </div>
-                <p className="text-[#5A5E55] mb-4">"{review.content}"</p>
-                <p className="font-semibold text-[#0a0a0a]">{review.authorName}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-       {/* Blog */}
+        {/* Blog */}
        <BlogSection articles={featuredBlogs.map(b => ({
          id: b.id,
          title: b.title,

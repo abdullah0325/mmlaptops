@@ -482,25 +482,7 @@ async function main() {
       sectionKey: "essence",
       title: "Your Trusted Tech Destination",
       subtitle: "Premium laptops and accessories for work, gaming, and everyday life.",
-      content: {
-        cards: [
-          {
-            title: "Power Your Work",
-            description: "Business laptops built for productivity and reliability.",
-            image: "https://placehold.co/400x300?text=Business",
-          },
-          {
-            title: "Dominate the Game",
-            description: "High-refresh gaming laptops with the latest GPUs.",
-            image: "https://placehold.co/400x300?text=Gaming",
-          },
-          {
-            title: "Travel Light",
-            description: "Ultrabooks with all-day battery and premium build quality.",
-            image: "https://placehold.co/400x300?text=Ultrabook",
-          },
-        ],
-      },
+      content: [],
       isActive: true,
       order: 1,
       image: HERO_IMAGE,

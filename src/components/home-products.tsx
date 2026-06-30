@@ -86,7 +86,7 @@ function CollectionSlider({ collections }: { collections: Collection[] }) {
                 src={collection.image || FALLBACK_IMAGE}
                 alt={collection.title}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-contain transition-transform duration-500 group-hover:scale-105"
               />
             </div>
             <div className="p-4 text-lg font-semibold text-[#0a0a0a]">{collection.title}</div>
@@ -194,7 +194,7 @@ export function HomeProducts({ categories, products, collections }: Props) {
       )}
 
       {(!selectedCategory || otherProducts.length > 0) && (
-        <section className="mx-auto w-full max-w-7xl px-6 lg:px-8">
+        <section className="bg-[#f5f5f5] mx-auto w-full max-w-7xl px-6 lg:px-8">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-2xl font-bold text-[#0a0a0a]">
               {selectedCategory ? "Other Products" : "Featured Products"}

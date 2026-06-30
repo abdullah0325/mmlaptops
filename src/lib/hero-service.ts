@@ -1,0 +1,104 @@
+import { HeroSlide } from "@/types/hero";
+import { promises as fs } from "fs";
+import path from "path";
+import { existsSync } from "fs";
+
+function getDataFilePath(): string {
+  const cwd = process.cwd();
+  const candidates = [
+    path.join(cwd, "data", "hero-slides.json"),
+    "/data/hero-slides.json",
+  ];
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) {
+      console.log("Hero slides data file found at:", candidate);
+      return candidate;
+    }
+  }
+  console.log("Hero slides data file not found, using default path:", candidates[0]);
+  return candidates[0];
+}
+
+const DATA_FILE = getDataFilePath();
+
+async function readData(): Promise<HeroSlide[]> {
+  try {
+    const content = await fs.readFile(DATA_FILE, "utf-8");
+    return JSON.parse(content);
+  } catch (error) {
+    console.error("Failed to read hero slides data:", { path: DATA_FILE, error });
+    return [];
+  }
+}
+
+async function writeData(slides: HeroSlide[]): Promise<void> {
+  await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
+  await fs.writeFile(DATA_FILE, JSON.stringify(slides, null, 2), "utf-8");
+}
+
+export async function getActiveHeroSlides(): Promise<HeroSlide[]> {
+  const slides = await readData();
+  return slides
+    .filter((slide) => slide.isActive)
+    .sort((a, b) => a.order - b.order);
+}
+
+export async function getAllHeroSlides(): Promise<HeroSlide[]> {
+  const slides = await readData();
+  return slides.sort((a, b) => a.order - b.order);
+}
+
+export async function createHeroSlide(
+  slide: Omit<HeroSlide, "id">,
+): Promise<HeroSlide> {
+  const slides = await readData();
+  const maxOrder = Math.max(0, ...slides.map((s) => s.order));
+  const newSlide: HeroSlide = {
+    ...slide,
+    id: `slide-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    order: maxOrder + 1,
+  };
+  slides.push(newSlide);
+  await writeData(slides);
+  return newSlide;
+}
+
+export async function updateHeroSlide(
+  id: string,
+  data: Partial<Omit<HeroSlide, "id">>,
+): Promise<HeroSlide | null> {
+  const slides = await readData();
+  const index = slides.findIndex((s) => s.id === id);
+  if (index === -1) return null;
+  slides[index] = { ...slides[index], ...data };
+  await writeData(slides);
+  return slides[index];
+}
+
+export async function deleteHeroSlide(id: string): Promise<boolean> {
+  const slides = await readData();
+  const filtered = slides.filter((s) => s.id !== id);
+  if (filtered.length === slides.length) return false;
+  await writeData(filtered);
+  return true;
+}
+
+export async function reorderHeroSlides(
+  orderedIds: string[],
+): Promise<HeroSlide[]> {
+  const slides = await readData();
+  const ordered: HeroSlide[] = [];
+  for (let i = 0; i < orderedIds.length; i++) {
+    const slide = slides.find((s) => s.id === orderedIds[i]);
+    if (slide) {
+      slide.order = i + 1;
+      ordered.push(slide);
+    }
+  }
+  for (const slide of slides.filter((s) => !orderedIds.includes(s.id))) {
+    slide.order = orderedIds.length + 1;
+    ordered.push(slide);
+  }
+  await writeData(ordered);
+  return ordered;
+}

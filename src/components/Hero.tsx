@@ -1,415 +1,416 @@
-"use client"
+// "use client";
 
-import Link from "next/link"
-import { Autoplay, Pagination, Navigation } from "swiper/modules"
-import { Swiper, SwiperSlide } from "swiper/react"
+// import {
+//   useCallback,
+//   useEffect,
+//   useLayoutEffect,
+//   useRef,
+//   useState,
+// } from "react";
+// import Image from "next/image";
+// import Link from "next/link";
+// import {
+//   ArrowRight,
+//   ChevronLeft,
+//   ChevronRight,
+// } from "lucide-react";
 
-// If you get TS errors on these imports, add  "types": ["swiper"]  to your tsconfig,
-// or create a file  swiper.d.ts  with:  declare module 'swiper/css';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import "swiper/css"
-// @ts-ignore
-import "swiper/css/navigation"
-// @ts-ignore
-import "swiper/css/pagination"
+// export interface HeroSlide {
+//   id: string;
+//   imageUrl: string;
+//   imageAlt: string;
+//   eyebrow?: string;
+//   title: string;
+//   titleHighlight?: string;
+//   description?: string;
+//   ctaLabel?: string;
+//   ctaHref?: string;
 
-const slides = [
-  {
-    id: 1,
-    eyebrow: "Your Trusted Tech Destination",
-    title: "Premium Laptops",
-    titleGold: "& Tech",
-    subtitle: "Power. Performance. Portability.",
-    description:
-      "Discover the latest gaming laptops, business ultrabooks, and budget-friendly machines — all backed by genuine warranty at MM Laptop Center.",
-  },
-  {
-    id: 2,
-    eyebrow: "Gaming Laptops",
-    title: "Dominate",
-    titleGold: "Every Game",
-    subtitle: "RTX-powered performance",
-    description:
-      "High-refresh displays, latest NVIDIA GPUs, and powerful processors — built for gamers who demand the best.",
-  },
-  {
-    id: 3,
-    eyebrow: "Business & Ultrabooks",
-    title: "Work Smarter,",
-    titleGold: "Anywhere",
-    subtitle: "Lightweight. All-day battery.",
-    description:
-      "Premium business laptops and ultrabooks designed for professionals who need reliability on the go.",
-  },
-  {
-    id: 4,
-    eyebrow: "Hot Deals",
-    title: "Accessories",
-    titleGold: "& Peripherals",
-    subtitle: "Complete your setup",
-    description:
-      "Monitors, keyboards, mice, bags, and more — everything you need to upgrade your laptop experience.",
-  },
-]
+//   /**
+//    * Controls which part of the background image stays visible.
+//    *
+//    * Examples:
+//    * "center"
+//    * "center right"
+//    * "70% center"
+//    * "80% 40%"
+//    */
+//     imagePosition?: string;
+// }
 
-const Hero = () => {
-  return (
-    <>
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap');
+// interface HeroSectionProps {
+//   slides: HeroSlide[];
+//   autoplayDuration?: number;
+// }
 
-        /* ── root tokens (matching reference HTML) ── */
-        .mm-hero-wrap {
-          --gold:        #d8a928;
-          --gold-light:  #f4d77a;
-          --orange:      #f6a45d;
-          --orange-light:#ffd2aa;
-          --cream:       #fff9f0;
-          --black:       #0a0a0a;
-          --brown-dark:  #1a1308;
-          --brown-text:  #4d3d28;
-          --brown-muted: #6b5d3e;
-          --brown-deep:  #8b6f2a;
-          font-family: "Manrope", sans-serif;
-        }
+// const DEFAULT_AUTOPLAY_DURATION = 6000;
 
-        /* ── Section / background ── */
-        .mm-hero-section {
-          position: relative;
-          overflow: hidden;
-          background:
-            radial-gradient(circle at 77% 18%, rgba(246,164,93,.18), transparent 27%),
-            radial-gradient(circle at 12% 78%, rgba(216,169,40,.15), transparent 28%),
-            linear-gradient(145deg, #fcf5e8 0%, #f5e8d0 100%);
-        }
+// export default function HeroSection({
+//   slides,
+//   autoplayDuration = DEFAULT_AUTOPLAY_DURATION,
+// }: HeroSectionProps) {
+//   const sectionRef = useRef<HTMLElement | null>(null);
 
-        /* floating gold rings (::before / ::after via pseudo divs) */
-        .mm-hero-ring-1,
-        .mm-hero-ring-2 {
-          pointer-events: none;
-          position: absolute;
-          border: 1px solid rgba(216,169,40,.15);
-          border-radius: 50%;
-          animation: mmFloatRing 8s ease-in-out infinite;
-        }
-        .mm-hero-ring-1 { width: 470px; height: 470px; right: -100px; top: 60px; }
-        .mm-hero-ring-2 { width: 260px; height: 260px; left: -90px; bottom: 45px; animation-delay: -3s; }
+//   const [activeSlide, setActiveSlide] = useState(0);
+//   const [isPaused, setIsPaused] = useState(false);
+//   const [heroHeight, setHeroHeight] = useState<number | null>(
+//     null
+//   );
 
-        @keyframes mmFloatRing {
-          50% { transform: translateY(-20px) scale(1.04); }
-        }
+//   /**
+//    * Dynamically calculates the available space below the header.
+//    *
+//    * This means:
+//    * viewport height - hero's top position = hero height
+//    *
+//    * Therefore, the complete hero remains visible without adding
+//    * unnecessary page scrolling.
+//    */
+//   const calculateHeroHeight = useCallback(() => {
+//     const section = sectionRef.current;
 
-        /* ── Slide inner layout ── */
-        .mm-slide-inner {
-          min-height: 560px;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          align-items: center;
-          gap: 52px;
-          max-width: 1180px;
-          margin: 0 auto;
-          padding: 80px 24px;
-          position: relative;
-          z-index: 2;
-        }
+//     if (!section) return;
 
-        @media (max-width: 768px) {
-          .mm-slide-inner {
-            grid-template-columns: 1fr;
-            min-height: auto;
-            padding: 60px 20px 48px;
-            gap: 32px;
-            text-align: center;
-          }
-          .mm-visual { display: none; }
-          .mm-hero-actions { justify-content: center; }
-        }
+//     const viewportHeight =
+//       window.visualViewport?.height || window.innerHeight;
 
-        /* ── Eyebrow ── */
-        .mm-eyebrow {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          padding: 9px 16px;
-          border: 1px solid rgba(216,169,40,.3);
-          background: rgba(255,255,255,.55);
-          border-radius: 999px;
-          color: #8b6f2a;
-          text-transform: uppercase;
-          letter-spacing: 2px;
-          font-size: 11px;
-          font-weight: 800;
-          margin-bottom: 22px;
-        }
-        .mm-eyebrow-dot {
-          width: 8px; height: 8px;
-          border-radius: 50%;
-          background: #f6a45d;
-          box-shadow: 0 0 14px #f6a45d;
-          flex-shrink: 0;
-        }
+//     const sectionTop = section.getBoundingClientRect().top;
 
-        /* ── Title ── */
-        .mm-title {
-          font-family: "Playfair Display", serif;
-          font-size: clamp(40px, 5.5vw, 80px);
-          line-height: .98;
-          letter-spacing: -2.5px;
-          color: #1a1308;
-          margin: 0 0 16px;
-        }
-        .mm-title-gold {
-          background: linear-gradient(90deg, #b8860b, #d8a928, #f6a45d);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          color: transparent;
-          display: block;
-        }
+//     const availableHeight = viewportHeight - sectionTop;
 
-        /* ── Subtitle ── */
-        .mm-subtitle {
-          font-size: 15px;
-          font-weight: 700;
-          color: #f6a45d;
-          letter-spacing: .4px;
-          margin-bottom: 14px;
-        }
+//     setHeroHeight(Math.max(availableHeight, 0));
+//   }, []);
 
-        /* ── Description ── */
-        .mm-desc {
-          color: #4d3d28;
-          font-size: 15px;
-          line-height: 1.8;
-          font-weight: 400;
-          max-width: 520px;
-          margin-bottom: 32px;
-        }
+//   useLayoutEffect(() => {
+//     calculateHeroHeight();
 
-        /* ── Buttons ── */
-        .mm-hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+//     const animationFrame = window.requestAnimationFrame(
+//       calculateHeroHeight
+//     );
 
-        .mm-btn-primary {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          background: linear-gradient(135deg, #f4d77a, #d8a928, #f6a45d);
-          color: #0d0d0d;
-          padding: 14px 28px;
-          border-radius: 16px;
-          font-size: 13px;
-          font-weight: 800;
-          font-family: "Manrope", sans-serif;
-          letter-spacing: .4px;
-          text-decoration: none;
-          box-shadow: 0 14px 32px rgba(216,169,40,.28);
-          transition: transform .28s ease, box-shadow .28s ease;
-        }
-        .mm-btn-primary:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 22px 42px rgba(216,169,40,.38);
-          color: #0d0d0d;
-        }
+//     const resizeObserver = new ResizeObserver(() => {
+//       calculateHeroHeight();
+//     });
 
-        .mm-btn-outline {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          background: rgba(255,255,255,.55);
-          color: #2d2416;
-          padding: 13px 28px;
-          border-radius: 16px;
-          font-size: 13px;
-          font-weight: 800;
-          font-family: "Manrope", sans-serif;
-          letter-spacing: .4px;
-          text-decoration: none;
-          border: 1px solid rgba(216,169,40,.3);
-          transition: transform .28s ease, border-color .28s ease, color .28s ease;
-        }
-        .mm-btn-outline:hover {
-          transform: translateY(-4px);
-          border-color: #d8a928;
-          color: #8b6f2a;
-        }
+//     resizeObserver.observe(document.body);
 
-        /* ── Visual panel (right side) ── */
-        .mm-visual {
-          position: relative;
-          display: grid;
-          place-items: center;
-        }
+//     window.addEventListener("resize", calculateHeroHeight);
 
-        .mm-visual-card {
-          width: min(480px, 100%);
-          border-radius: 32px;
-          overflow: hidden;
-          background: linear-gradient(145deg, #f5e8d0, #e8d5b5);
-          border: 2px solid rgba(216,169,40,.22);
-          box-shadow: 0 35px 90px rgba(0,0,0,.10);
-          transform: perspective(1100px) rotateY(-5deg) rotateX(2deg);
-          animation: mmFloatCard 5s ease-in-out infinite;
-          aspect-ratio: 4/3;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
+//     window.visualViewport?.addEventListener(
+//       "resize",
+//       calculateHeroHeight
+//     );
 
-        @keyframes mmFloatCard {
-          0%, 100% { transform: perspective(1100px) rotateY(-5deg) rotateX(2deg) translateY(0); }
-          50%       { transform: perspective(1100px) rotateY(-5deg) rotateX(2deg) translateY(-14px); }
-        }
+//     return () => {
+//       window.cancelAnimationFrame(animationFrame);
+//       resizeObserver.disconnect();
 
-        .mm-visual-inner {
-          font-family: "Playfair Display", serif;
-          font-size: 28px;
-          font-weight: 800;
-          color: #8b6f2a;
-          text-align: center;
-          padding: 32px;
-          letter-spacing: -0.5px;
-        }
+//       window.removeEventListener(
+//         "resize",
+//         calculateHeroHeight
+//       );
 
-        .mm-visual-inner span {
-          display: block;
-          font-family: "Manrope", sans-serif;
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 2.5px;
-          text-transform: uppercase;
-          color: #b8860b;
-          margin-top: 8px;
-        }
+//       window.visualViewport?.removeEventListener(
+//         "resize",
+//         calculateHeroHeight
+//       );
+//     };
+//   }, [calculateHeroHeight]);
 
-        /* badge floating */
-        .mm-badge {
-          position: absolute;
-          background: linear-gradient(135deg, #f4d77a, #d8a928);
-          color: #0a0a0a;
-          font-family: "Manrope", sans-serif;
-          font-size: 11px;
-          font-weight: 800;
-          padding: 10px 16px;
-          border-radius: 14px;
-          box-shadow: 0 8px 24px rgba(216,169,40,.3);
-          white-space: nowrap;
-        }
-        .mm-badge-tl { top: 24px;  left: -16px; }
-        .mm-badge-br { bottom: 24px; right: -16px; }
+//   /**
+//    * Ensures the active slide remains valid when dynamic database
+//    * slides are added or removed.
+//    */
+//   useEffect(() => {
+//     if (slides.length === 0) return;
 
-        /* ── Pagination ── */
-        .mm-heroSwiper .swiper-pagination {
-          bottom: 20px;
-        }
-        .mm-heroSwiper .swiper-pagination-bullet {
-          width: 7px; height: 7px;
-          background: rgba(26,19,8,.25);
-          opacity: 1;
-          transition: all .3s;
-        }
-        .mm-heroSwiper .swiper-pagination-bullet-active {
-          background: #d8a928;
-          width: 24px;
-          border-radius: 4px;
-        }
+//     if (activeSlide >= slides.length) {
+//       setActiveSlide(0);
+//     }
+//   }, [activeSlide, slides.length]);
 
-        /* ── Nav arrows ── */
-        .mm-heroSwiper .swiper-button-prev,
-        .mm-heroSwiper .swiper-button-next {
-          width: 46px; height: 46px;
-          border-radius: 50%;
-          background: rgba(255,255,255,.7);
-          border: 1px solid rgba(216,169,40,.3);
-          color: #8b6f2a;
-          backdrop-filter: blur(8px);
-          transition: .25s ease;
-        }
-        .mm-heroSwiper .swiper-button-prev:hover,
-        .mm-heroSwiper .swiper-button-next:hover {
-          background: #fff;
-          border-color: #d8a928;
-          color: #b8860b;
-        }
-        .mm-heroSwiper .swiper-button-prev::after,
-        .mm-heroSwiper .swiper-button-next::after {
-          font-size: 14px; font-weight: 900;
-        }
+//   const goToSlide = useCallback(
+//     (index: number) => {
+//       if (slides.length === 0) return;
 
-        @media (max-width: 768px) {
-          .mm-heroSwiper .swiper-button-prev,
-          .mm-heroSwiper .swiper-button-next { display: none; }
-        }
-      `}</style>
+//       const safeIndex =
+//         ((index % slides.length) + slides.length) %
+//         slides.length;
 
-      <div className="mm-hero-wrap">
-        <section className="mm-hero-section">
-          {/* decorative rings */}
-          <div className="mm-hero-ring-1" />
-          <div className="mm-hero-ring-2" />
+//       setActiveSlide(safeIndex);
+//     },
+//     [slides.length]
+//   );
 
-          <Swiper
-            modules={[Autoplay, Pagination, Navigation]}
-            slidesPerView={1}
-            loop
-            speed={900}
-            autoplay={{ delay: 5500, disableOnInteraction: false }}
-            pagination={{ clickable: true }}
-            navigation
-            className="mm-heroSwiper"
-          >
-            {slides.map((slide) => (
-              <SwiperSlide key={slide.id}>
-                <div className="mm-slide-inner">
+//   const showNextSlide = useCallback(() => {
+//     if (slides.length <= 1) return;
 
-                  {/* ── LEFT: text content ── */}
-                  <div>
-                    <div className="mm-eyebrow">
-                      <span className="mm-eyebrow-dot" />
-                      {slide.eyebrow}
-                    </div>
+//     setActiveSlide(
+//       (currentSlide) =>
+//         (currentSlide + 1) % slides.length
+//     );
+//   }, [slides.length]);
 
-                    <h1 className="mm-title">
-                      {slide.title}
-                      <span className="mm-title-gold">{slide.titleGold}</span>
-                    </h1>
+//   const showPreviousSlide = useCallback(() => {
+//     if (slides.length <= 1) return;
 
-                    <p className="mm-subtitle">{slide.subtitle}</p>
+//     setActiveSlide(
+//       (currentSlide) =>
+//         (currentSlide - 1 + slides.length) %
+//         slides.length
+//     );
+//   }, [slides.length]);
 
-                    <p className="mm-desc">{slide.description}</p>
+//   /**
+//    * Autoplay uses setTimeout instead of setInterval.
+//    *
+//    * This prevents multiple intervals from being created when the
+//    * user repeatedly enters and leaves the hero.
+//    */
+//   useEffect(() => {
+//     if (
+//       slides.length <= 1 ||
+//       isPaused ||
+//       autoplayDuration <= 0
+//     ) {
+//       return;
+//     }
 
-                    <div className="mm-hero-actions">
-                      <Link href="/products" className="mm-btn-primary">
-                        Shop Now →
-                      </Link>
-                      <Link href="/collections/hot-deals" className="mm-btn-outline">
-                        View Deals
-                      </Link>
-                    </div>
-                  </div>
+//     const autoplayTimer = window.setTimeout(() => {
+//       showNextSlide();
+//     }, autoplayDuration);
 
-                  {/* ── RIGHT: visual card ── */}
-                  <div className="mm-visual">
-                    <div style={{ position: "relative" }}>
-                      <div className="mm-badge mm-badge-tl">✦ Genuine Warranty</div>
-                      <div className="mm-visual-card">
-                        <div className="mm-visual-inner">
-                          MM Laptop Center
-                          <span>Premium Technology</span>
-                        </div>
-                      </div>
-                      <div className="mm-badge mm-badge-br">🚀 Fast Delivery</div>
-                    </div>
-                  </div>
+//     return () => {
+//       window.clearTimeout(autoplayTimer);
+//     };
+//   }, [
+//     activeSlide,
+//     autoplayDuration,
+//     isPaused,
+//     showNextSlide,
+//     slides.length,
+//   ]);
 
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
-      </div>
-    </>
-  )
-}
+//   /**
+//    * Keyboard navigation.
+//    */
+//   const handleKeyboardNavigation = (
+//     event: React.KeyboardEvent<HTMLElement>
+//   ) => {
+//     if (event.key === "ArrowLeft") {
+//       showPreviousSlide();
+//     }
 
-export default Hero
+//     if (event.key === "ArrowRight") {
+//       showNextSlide();
+//     }
+//   };
+
+//   if (slides.length === 0) {
+//     return null;
+//   }
+
+//   return (
+//     <>
+//       <section
+//         ref={sectionRef}
+//         aria-label="Featured collections"
+//         aria-roledescription="carousel"
+//         tabIndex={0}
+//         style={{
+//           height:
+//             heroHeight !== null
+//               ? `${heroHeight}px`
+//               : "calc(100svh - 164px)",
+//         }}
+//         className="hero-section relative w-full overflow-hidden bg-gray-100 outline-none"
+//         onKeyDown={handleKeyboardNavigation}
+//         onMouseEnter={() => setIsPaused(true)}
+//         onMouseLeave={() => setIsPaused(false)}
+//         onFocusCapture={() => setIsPaused(true)}
+//         onBlurCapture={() => setIsPaused(false)}
+//         onTouchStart={() => setIsPaused(true)}
+//         onTouchEnd={() => setIsPaused(false)}
+//       >
+//         {/* Full-width dynamic background images */}
+//         {slides.map((slide, index) => {
+//           const isActive = index === activeSlide;
+
+//           return (
+//             <div
+//               key={slide.id}
+//               aria-hidden={!isActive}
+//               className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+//                 isActive
+//                   ? "z-0 opacity-100"
+//                   : "pointer-events-none opacity-0"
+//               }`}
+//             >
+//               <Image
+//                 src={slide.imageUrl}
+//                 alt={slide.imageAlt}
+//                 fill
+//                 priority={index === 0}
+//                 sizes="100vw"
+//                 style={{
+//                   objectPosition:
+//                     slide.imagePosition ||
+//                     "center center",
+//                 }}
+//                 className={`object-cover ${
+//                   isActive
+//                     ? "hero-ken-burns-animation"
+//                     : ""
+//                 }`}
+//               />
+//             </div>
+//           );
+//         })}
+
+//         {/* Soft color tint like the reference screenshot */}
+//         <div className="pointer-events-none absolute inset-0 z-[1] bg-rose-200/10" />
+
+//         {/* Left readability gradient */}
+//         <div className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(90deg,rgba(255,237,240,0.96)_0%,rgba(255,232,236,0.87)_24%,rgba(255,234,237,0.56)_42%,rgba(255,255,255,0.12)_64%,transparent_82%)]" />
+
+//         {/* Dynamic slide text content */}
+//         <div className="absolute inset-0 z-10">
+//           {slides.map((slide, index) => {
+//             const isActive = index === activeSlide;
+
+//             return (
+//               <div
+//                 key={slide.id}
+//                 aria-hidden={!isActive}
+//                 className={`absolute inset-0 flex items-center px-7 transition-all duration-700 ease-out sm:px-10 md:px-12 lg:px-[68px] ${
+//                   isActive
+//                     ? "translate-y-0 opacity-100"
+//                     : "pointer-events-none translate-y-6 opacity-0"
+//                 }`}
+//               >
+//                 <div className="w-full max-w-[780px]">
+//                   {slide.eyebrow && (
+//                     <div className="mb-5 sm:mb-6 lg:mb-8">
+//                       <span className="inline-flex items-center rounded-full border border-orange-400/80 bg-orange-200/50 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.15em] text-orange-600 backdrop-blur-sm sm:px-6 sm:py-3 sm:text-sm lg:text-base">
+//                         {slide.eyebrow}
+//                       </span>
+//                     </div>
+//                   )}
+
+//                   <h1 className="max-w-[760px] text-[42px] font-extrabold leading-[0.98] tracking-[-0.045em] text-slate-950 sm:text-[56px] md:text-[66px] lg:text-[82px]">
+//                     <span>{slide.title}</span>
+
+//                     {slide.titleHighlight && (
+//                       <>
+//                         <br />
+//                         <span>{slide.titleHighlight}</span>
+//                       </>
+//                     )}
+//                   </h1>
+
+//                   {slide.description && (
+//                     <p className="mt-5 max-w-[690px] text-base leading-relaxed text-slate-700 sm:mt-6 sm:text-lg md:text-xl lg:mt-8 lg:text-[27px] lg:leading-[1.4]">
+//                       {slide.description}
+//                     </p>
+//                   )}
+
+//                   {slide.ctaLabel && (
+//                     <Link
+//                       href={slide.ctaHref || "#"}
+//                       tabIndex={isActive ? 0 : -1}
+//                       className="group mt-7 inline-flex min-h-[58px] items-center justify-center gap-3 bg-orange-500 px-7 text-base font-bold text-white shadow-[0_14px_30px_rgba(249,115,22,0.28)] transition-all duration-300 hover:-translate-y-1 hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:mt-9 sm:min-h-[64px] sm:px-9 sm:text-lg lg:mt-10 lg:min-h-[72px]"
+//                     >
+//                       <span>{slide.ctaLabel}</span>
+
+//                       <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 sm:h-6 sm:w-6" />
+//                     </Link>
+//                   )}
+//                 </div>
+//               </div>
+//             );
+//           })}
+//         </div>
+
+//         {/* Left and right navigation arrows */}
+//         {slides.length > 1 && (
+//           <>
+//             <button
+//               type="button"
+//               aria-label="Show previous slide"
+//               onClick={showPreviousSlide}
+//               className="group absolute left-0 top-1/2 z-30 flex h-20 w-11 -translate-y-1/2 items-center justify-center rounded-r-2xl border border-white/30 bg-white/20 text-white shadow-lg backdrop-blur-[3px] transition-all duration-300 hover:w-14 hover:bg-white/35 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:h-24 sm:w-14 lg:h-28 lg:w-[68px]"
+//             >
+//               <ChevronLeft className="h-7 w-7 transition-transform duration-300 group-hover:-translate-x-1 sm:h-8 sm:w-8 lg:h-9 lg:w-9" />
+//             </button>
+
+//             <button
+//               type="button"
+//               aria-label="Show next slide"
+//               onClick={showNextSlide}
+//               className="group absolute right-0 top-1/2 z-30 flex h-20 w-11 -translate-y-1/2 items-center justify-center rounded-l-2xl border border-white/30 bg-white/20 text-white shadow-lg backdrop-blur-[3px] transition-all duration-300 hover:w-14 hover:bg-white/35 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:h-24 sm:w-14 lg:h-28 lg:w-[68px]"
+//             >
+//               <ChevronRight className="h-7 w-7 transition-transform duration-300 group-hover:translate-x-1 sm:h-8 sm:w-8 lg:h-9 lg:w-9" />
+//             </button>
+//           </>
+//         )}
+
+//         {/* Indicators positioned inside the hero at the bottom */}
+//         {slides.length > 1 && (
+//           <div
+//             role="tablist"
+//             aria-label="Choose hero slide"
+//             className="absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 sm:bottom-7 sm:gap-3"
+//           >
+//             {slides.map((slide, index) => {
+//               const isActive = index === activeSlide;
+
+//               return (
+//                 <button
+//                   key={slide.id}
+//                   type="button"
+//                   role="tab"
+//                   aria-label={`Show slide ${index + 1}`}
+//                   aria-selected={isActive}
+//                   onClick={() => goToSlide(index)}
+//                   className={`h-2 rounded-full shadow-sm transition-all duration-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:h-2.5 ${
+//                     isActive
+//                       ? "w-12 bg-orange-10 sm:w-16"
+//                       : "w-8 bg-white/70 hover:bg-white sm:w-11"
+//                   }`}
+//                 />
+//               );
+//             })}
+//           </div>
+//         )}
+//       </section>
+
+//       {/* Component animation — no Tailwind config required */}
+//       <style jsx global>{`
+//         @keyframes heroKenBurns {
+//           0% {
+//             transform: scale(1);
+//           }
+
+//           100% {
+//             transform: scale(1.1);
+//           }
+//         }
+
+//         .hero-ken-burns-animation {
+//           animation: heroKenBurns 7s ease-out forwards;
+//         }
+
+//         @media (prefers-reduced-motion: reduce) {
+//           .hero-section *,
+//           .hero-section *::before,
+//           .hero-section *::after {
+//             scroll-behavior: auto !important;
+//             animation-duration: 0.01ms !important;
+//             animation-iteration-count: 1 !important;
+//             transition-duration: 0.01ms !important;
+//           }
+//         }
+//       `}</style>
+//     </>
+//   );
+// }
