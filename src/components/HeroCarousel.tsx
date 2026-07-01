@@ -22,15 +22,13 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [heroHeight, setHeroHeight] = useState<string>(
-    "calc(100dvh - 164px)"
-  );
+  const [heroHeight, setHeroHeight] = useState<string>("100dvh");
 
-  /**
-   * Calculates the exact visible space remaining below the website header.
-   * This keeps the complete hero inside the current screen without requiring
-   * a fixed header-height value or adding extra page scroll.
-   */
+/**
+    * Calculates the exact visible space remaining below the website header.
+    * This keeps the complete hero inside the current screen without requiring
+    * a fixed header-height value or adding extra page scroll.
+    */
   const updateHeroHeight = useCallback(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -38,17 +36,18 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
     const viewportHeight =
       window.visualViewport?.height ?? window.innerHeight;
     const sectionTop = section.getBoundingClientRect().top;
-    const availableHeight = Math.max(viewportHeight - sectionTop, 0);
+    const availableHeight = Math.max(viewportHeight - sectionTop, 100);
 
     setHeroHeight(`${Math.round(availableHeight)}px`);
   }, []);
 
   useLayoutEffect(() => {
-    updateHeroHeight();
-
-    const firstFrame = window.requestAnimationFrame(updateHeroHeight);
-    const secondFrame = window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(updateHeroHeight);
+    // Set initial height synchronously to prevent layout shift
+    setHeroHeight("100dvh");
+    
+    // Defer precise calculation
+    const rafId = window.requestAnimationFrame(() => {
+      updateHeroHeight();
     });
 
     window.addEventListener("resize", updateHeroHeight);
@@ -58,18 +57,15 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
     const parent = sectionRef.current?.parentElement;
     const resizeObserver =
       typeof ResizeObserver !== "undefined"
-        ? new ResizeObserver(updateHeroHeight)
+        ? new ResizeObserver(() => {
+            window.requestAnimationFrame(updateHeroHeight);
+          })
         : null;
 
     if (parent) resizeObserver?.observe(parent);
 
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(updateHeroHeight).catch(() => undefined);
-    }
-
     return () => {
-      window.cancelAnimationFrame(firstFrame);
-      window.cancelAnimationFrame(secondFrame);
+      window.cancelAnimationFrame(rafId);
       window.removeEventListener("resize", updateHeroHeight);
       window.removeEventListener("orientationchange", updateHeroHeight);
       window.visualViewport?.removeEventListener("resize", updateHeroHeight);

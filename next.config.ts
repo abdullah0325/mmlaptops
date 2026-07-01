@@ -1,12 +1,8 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
-  turbopack: {
-    root: path.resolve(__dirname),
-  },
   serverExternalPackages: ["dompurify"],
   images: {
     domains: ["placehold.co", "res.cloudinary.com", "i.pinimg.com", "images.unsplash.com"],

@@ -1,29 +1,12 @@
 import { HeroSlide } from "@/types/hero";
 import { promises as fs } from "fs";
 import path from "path";
-import { existsSync } from "fs";
 
-function getDataFilePath(): string {
-  const cwd = process.cwd();
-  const candidates = [
-    path.join(cwd, "data", "hero-slides.json"),
-    "/data/hero-slides.json",
-  ];
-  for (const candidate of candidates) {
-    if (existsSync(candidate)) {
-      console.log("Hero slides data file found at:", candidate);
-      return candidate;
-    }
-  }
-  console.log("Hero slides data file not found, using default path:", candidates[0]);
-  return candidates[0];
-}
-
-const DATA_FILE = getDataFilePath();
+const DATA_FILE = "data/hero-slides.json";
 
 async function readData(): Promise<HeroSlide[]> {
   try {
-    const content = await fs.readFile(DATA_FILE, "utf-8");
+    const content = await fs.readFile(path.join(process.cwd(), DATA_FILE), "utf-8");
     return JSON.parse(content);
   } catch (error) {
     console.error("Failed to read hero slides data:", { path: DATA_FILE, error });
@@ -32,8 +15,9 @@ async function readData(): Promise<HeroSlide[]> {
 }
 
 async function writeData(slides: HeroSlide[]): Promise<void> {
-  await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
-  await fs.writeFile(DATA_FILE, JSON.stringify(slides, null, 2), "utf-8");
+  const fullPath = path.join(process.cwd(), DATA_FILE);
+  await fs.mkdir(path.dirname(fullPath), { recursive: true });
+  await fs.writeFile(fullPath, JSON.stringify(slides, null, 2), "utf-8");
 }
 
 export async function getActiveHeroSlides(): Promise<HeroSlide[]> {

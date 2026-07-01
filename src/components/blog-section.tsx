@@ -104,7 +104,7 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
           </p>
         </div>
 
-        {/* Horizontal scrollable carousel showing 2 items at a time */}
+        {/* Horizontal scrollable carousel */}
         <div className="relative mt-14">
           <div
             ref={scrollRef}
@@ -120,28 +120,28 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
               return (
                 <div
                   key={article.id}
-                  className="flex min-w-[calc(50%-0.75rem)] flex-shrink-0 snap-start items-stretch px-1.5"
+                  className="flex min-w-[calc(50%-0.5rem)] sm:min-w-[calc(33.333%-0.67rem)] lg:min-w-[calc(25%-0.75rem)] flex-shrink-0 snap-start items-stretch px-1"
                 >
-                  <div className="group relative w-full overflow-hidden rounded-xl bg-background shadow-sm transition-shadow hover:shadow-md">
+                  <div className="group relative w-full overflow-hidden rounded-lg bg-background shadow-sm transition-shadow hover:shadow-md">
                     {/* Image: object-contain keeps the full image visible, no heavy crop */}
-                    <div className="relative aspect-[16/10] bg-gray-50">
+                    <div className="relative aspect-[4/3] bg-gray-50">
                       {article.image?.url ? (
                         <Image
                           src={article.image.url}
                           alt={article.image.altText || article.title}
                           fill
-                          className="object-contain p-3 transition-transform duration-500 group-hover:scale-105"
-                          sizes="(min-width: 1024px) 50vw, (min-width: 768px) 50vw, 100vw"
+                          className="object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+                          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                         />
                       ) : (
-                        <div className="flex h-full items-center justify-center text-muted-foreground">
+                        <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
                           No image
                         </div>
                       )}
                     </div>
 
-                    <div className="p-4 sm:p-5">
-                      <time className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <div className="p-3">
+                      <time className="flex items-center gap-1 text-[11px] text-muted-foreground">
                         <Calendar className="h-3 w-3" />
                         {article.publishedAt
                           ? new Date(article.publishedAt).toLocaleDateString("en-US", {
@@ -152,7 +152,7 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
                           : ""}
                       </time>
 
-                      <h3 className="mt-2 text-lg sm:text-xl font-semibold leading-tight">
+                      <h3 className="mt-1.5 text-sm sm:text-base font-semibold leading-snug line-clamp-2">
                         <Link
                           href={`/blogs/${article.blogHandle}/${article.handle}`}
                           className="hover:text-primary"
@@ -161,15 +161,15 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
                         </Link>
                       </h3>
 
-                      <p className="mt-2 line-clamp-2 text-xs sm:text-sm text-muted-foreground">
+                      <p className="mt-1.5 line-clamp-2 text-xs text-muted-foreground">
                         {text}
                       </p>
 
                       <Link
                         href={`/blogs/${article.blogHandle}/${article.handle}`}
-                        className="mt-3 inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-primary"
+                        className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary"
                       >
-                        Read article <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
+                        Read article <ArrowRight className="h-3 w-3" />
                       </Link>
                     </div>
                   </div>
@@ -188,7 +188,7 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
                   aria-label="Scroll left"
                   className="group absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
                 >
-                  <ChevronLeft className="h-6 w-6 text-slate-800 transition-transform duration-300 group-hover:-translate-x-0.5" />
+                  <ChevronLeft className="h-5 w-5 text-slate-800 transition-transform duration-300 group-hover:-translate-x-0.5" />
                 </button>
               )}
 
@@ -199,7 +199,7 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
                   aria-label="Scroll right"
                   className="group absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
                 >
-                  <ChevronRight className="h-6 w-6 text-slate-800 transition-transform duration-300 group-hover:translate-x-0.5" />
+                  <ChevronRight className="h-5 w-5 text-slate-800 transition-transform duration-300 group-hover:translate-x-0.5" />
                 </button>
               )}
             </>
