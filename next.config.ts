@@ -1,10 +1,11 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
   turbopack: {
-    root: ".",
+    root: path.resolve(__dirname),
   },
   serverExternalPackages: ["dompurify"],
   images: {
