@@ -25,10 +25,10 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
   const [heroHeight, setHeroHeight] = useState<string>("100dvh");
 
 /**
-    * Calculates the exact visible space remaining below the website header.
-    * This keeps the complete hero inside the current screen without requiring
-    * a fixed header-height value or adding extra page scroll.
-    */
+ * Calculates the exact visible space remaining below the website header.
+     * This keeps the complete hero inside the current screen without requiring
+     * a fixed header-height value or adding extra page scroll.
+     */
   const updateHeroHeight = useCallback(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -45,10 +45,14 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
     // Set initial height synchronously to prevent layout shift
     setHeroHeight("100dvh");
     
-    // Defer precise calculation
+    // Small delay to ensure DOM is ready
     const rafId = window.requestAnimationFrame(() => {
       updateHeroHeight();
     });
+
+    const timeoutId = window.setTimeout(() => {
+      updateHeroHeight();
+    }, 100);
 
     window.addEventListener("resize", updateHeroHeight);
     window.addEventListener("orientationchange", updateHeroHeight);
@@ -66,6 +70,7 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
 
     return () => {
       window.cancelAnimationFrame(rafId);
+      window.clearTimeout(timeoutId);
       window.removeEventListener("resize", updateHeroHeight);
       window.removeEventListener("orientationchange", updateHeroHeight);
       window.visualViewport?.removeEventListener("resize", updateHeroHeight);

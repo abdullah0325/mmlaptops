@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin-auth";
-import { promises as fs } from "fs";
-import path from "path";
+import { uploadImage } from "@/lib/cloudinary";
+import { updateHeroSlide } from "@/lib/hero-service";
 
 export async function POST(request: Request) {
   try {
@@ -9,6 +9,7 @@ export async function POST(request: Request) {
 
     const formData = await request.formData();
     const file = formData.get("file") as File;
+    const slideId = formData.get("slideId") as string | null;
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
@@ -16,27 +17,22 @@ export async function POST(request: Request) {
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const result = await uploadImage(buffer, "hero");
 
-    const uploadsDir = path.join(
-      process.cwd(),
-      "public",
-      "uploads",
-      "hero",
-    );
-    await fs.mkdir(uploadsDir, { recursive: true });
+    const url = result.url;
+    const publicId = result.publicId;
 
-    const ext = file.name.split(".").pop() || "jpg";
-    const filename = `hero-${Date.now()}-${Math.random().toString(36).slice(2, 7)}.${ext}`;
-    const filePath = path.join(uploadsDir, filename);
+    if (slideId) {
+      await updateHeroSlide(slideId, {
+        imageUrl: url,
+      });
+    }
 
-    await fs.writeFile(filePath, buffer);
-
-    const url = `/uploads/hero/${filename}`;
-    return NextResponse.json({ url });
-  } catch (error: any) {
+    return NextResponse.json({ url, publicId });
+  } catch (error: unknown) {
     console.error("Error uploading image:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to upload image" },
+      { error: (error as Error).message || "Failed to upload image" },
       { status: 500 },
     );
   }

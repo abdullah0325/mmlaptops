@@ -10,5 +10,9 @@ export default async function HeroSection() {
     return null;
   }
 
-  return <HeroCarousel slides={slides} />;
+  return (
+    <div className="relative w-full" style={{ height: "100dvh" }}>
+      <HeroCarousel slides={slides} />
+    </div>
+  );
 }
