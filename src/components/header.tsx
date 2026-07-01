@@ -11,7 +11,6 @@ import {
 } from "@esmate/shadcn/components/ui/sheet";
 import {
   ChevronDown,
-  Heart,
   Menu,
   Phone,
   Search,
@@ -316,30 +315,6 @@ export function Header() {
           </Link>
 
           <div className="relative">
-            <Link
-              href="/collections/new-arrivals"
-              className="text-sm font-semibold text-[#1a1308] transition-colors hover:text-[#b57910]"
-            >
-              New Arrivals
-            </Link>
-            <span className="absolute -right-3 -top-2.5 rounded-full bg-emerald-500 px-1.5 py-[1px] text-[8px] font-bold uppercase leading-tight tracking-wide text-white shadow-sm">
-              New
-            </span>
-          </div>
-
-          <div className="relative">
-            <Link
-              href="/collections/best-sellers"
-              className="text-sm font-semibold text-[#1a1308] transition-colors hover:text-[#b57910]"
-            >
-              Best Sellers
-            </Link>
-            <span className="absolute -right-3 -top-2.5 rounded-full bg-rose-500 px-1.5 py-[1px] text-[8px] font-bold uppercase leading-tight tracking-wide text-white shadow-sm">
-              Hot
-            </span>
-          </div>
-
-          <div className="relative">
             <div className="group">
               <div className="flex cursor-pointer items-center gap-1">
                 <Link
@@ -411,17 +386,25 @@ export function Header() {
 
           <div className="relative">
             <Link
-              href="/collections/hot-deals"
-              className={`text-sm font-semibold transition-colors hover:text-[#b57910] ${
-                isActive("/collections/hot-deals")
-                  ? "text-[#8a5b00]"
-                  : "text-[#1a1308]"
-              }`}
+              href="/collections/new-arrivals"
+              className="text-sm font-semibold text-[#1a1308] transition-colors hover:text-[#b57910]"
             >
-              Sale
+              New Arrivals
             </Link>
-            <span className="absolute -right-3 -top-2.5 rounded-full bg-amber-500 px-1.5 py-[1px] text-[8px] font-bold uppercase leading-tight tracking-wide text-white shadow-sm">
-              Sale
+            <span className="absolute -right-3 -top-2.5 rounded-full bg-emerald-500 px-1.5 py-[1px] text-[8px] font-bold uppercase leading-tight tracking-wide text-white shadow-sm">
+              New
+            </span>
+          </div>
+
+          <div className="relative">
+            <Link
+              href="/collections/best-sellers"
+              className="text-sm font-semibold text-[#1a1308] transition-colors hover:text-[#b57910]"
+            >
+              Best Sellers
+            </Link>
+            <span className="absolute -right-3 -top-2.5 rounded-full bg-rose-500 px-1.5 py-[1px] text-[8px] font-bold uppercase leading-tight tracking-wide text-white shadow-sm">
+              Hot
             </span>
           </div>
         </div>
@@ -495,14 +478,6 @@ export function Header() {
               </div>
             )}
           </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="relative h-10 w-10 text-[#1a1308] hover:text-[#b57910]"
-          >
-            <Heart className="h-5 w-5" />
-          </Button>
 
           <Button
             variant="ghost"
