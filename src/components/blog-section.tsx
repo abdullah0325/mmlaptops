@@ -120,7 +120,7 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
               return (
                 <div
                   key={article.id}
-                  className="flex min-w-[50%] flex-shrink-0 snap-start items-stretch px-4"
+                  className="flex min-w-[calc(50%-1rem)] flex-shrink-0 snap-start items-stretch px-2"
                 >
                   <div className="group relative w-full overflow-hidden rounded-2xl bg-background shadow-sm transition-shadow hover:shadow-md">
                     {/* Image: object-contain keeps the full image visible, no heavy crop */}
