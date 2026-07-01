@@ -120,17 +120,17 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
               return (
                 <div
                   key={article.id}
-                  className="flex min-w-[calc(50%-1rem)] flex-shrink-0 snap-start items-stretch px-2"
+                  className="flex min-w-[calc(50%-0.75rem)] flex-shrink-0 snap-start items-stretch px-1.5"
                 >
-                  <div className="group relative w-full overflow-hidden rounded-2xl bg-background shadow-sm transition-shadow hover:shadow-md">
+                  <div className="group relative w-full overflow-hidden rounded-xl bg-background shadow-sm transition-shadow hover:shadow-md">
                     {/* Image: object-contain keeps the full image visible, no heavy crop */}
-                    <div className="relative aspect-[4/3] bg-gray-50">
+                    <div className="relative aspect-[16/10] bg-gray-50">
                       {article.image?.url ? (
                         <Image
                           src={article.image.url}
                           alt={article.image.altText || article.title}
                           fill
-                          className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                          className="object-contain p-3 transition-transform duration-500 group-hover:scale-105"
                           sizes="(min-width: 1024px) 50vw, (min-width: 768px) 50vw, 100vw"
                         />
                       ) : (
@@ -140,19 +140,19 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
                       )}
                     </div>
 
-                    <div className="p-6 sm:p-8">
-                      <time className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <div className="p-4 sm:p-5">
+                      <time className="flex items-center gap-1.5 text-xs text-muted-foreground">
                         <Calendar className="h-3 w-3" />
                         {article.publishedAt
                           ? new Date(article.publishedAt).toLocaleDateString("en-US", {
-                              month: "long",
+                              month: "short",
                               day: "numeric",
                               year: "numeric",
                             })
                           : ""}
                       </time>
 
-                      <h3 className="mt-3 text-xl sm:text-2xl font-semibold leading-snug">
+                      <h3 className="mt-2 text-lg sm:text-xl font-semibold leading-tight">
                         <Link
                           href={`/blogs/${article.blogHandle}/${article.handle}`}
                           className="hover:text-primary"
@@ -161,15 +161,15 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
                         </Link>
                       </h3>
 
-                      <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">
+                      <p className="mt-2 line-clamp-2 text-xs sm:text-sm text-muted-foreground">
                         {text}
                       </p>
 
                       <Link
                         href={`/blogs/${article.blogHandle}/${article.handle}`}
-                        className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary"
+                        className="mt-3 inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-primary"
                       >
-                        Read article <ArrowRight className="h-4 w-4" />
+                        Read article <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
                       </Link>
                     </div>
                   </div>
