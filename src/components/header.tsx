@@ -17,7 +17,6 @@ import {
   ShieldCheck,
   ShoppingCart,
   Truck,
-  User,
 } from "@esmate/shadcn/pkgs/lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -386,6 +385,28 @@ export function Header() {
 
           <div className="relative">
             <Link
+              href="/about-us"
+              className={`text-sm font-semibold transition-colors hover:text-[#b57910] ${
+                isActive("/about-us") ? "text-[#8a5b00]" : "text-[#1a1308]"
+              }`}
+            >
+              About
+            </Link>
+          </div>
+
+          <div className="relative">
+            <Link
+              href="/contact"
+              className={`text-sm font-semibold transition-colors hover:text-[#b57910] ${
+                isActive("/contact") ? "text-[#8a5b00]" : "text-[#1a1308]"
+              }`}
+            >
+              Contact
+            </Link>
+          </div>
+
+          <div className="relative">
+            <Link
               href="/collections/new-arrivals"
               className="text-sm font-semibold text-[#1a1308] transition-colors hover:text-[#b57910]"
             >
@@ -493,20 +514,7 @@ export function Header() {
             )}
           </Button>
 
-          <div className="flex items-center gap-2 pl-1">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#f6a45d] to-[#d8a928] text-white">
-              <User className="h-4 w-4" />
-            </div>
-            <div className="leading-tight">
-              <p className="text-xs font-semibold text-[#1a1308]">Account</p>
-              <Link
-                href="/login"
-                className="text-[11px] text-[#5A5E55] hover:text-[#b57910]"
-              >
-                Sign in
-              </Link>
-            </div>
-          </div>
+
         </div>
       </nav>
 

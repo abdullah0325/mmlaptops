@@ -23,6 +23,7 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
   const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [heroHeight, setHeroHeight] = useState<string>("100dvh");
+  const [mounted, setMounted] = useState(false);
 
 /**
  * Calculates the exact visible space remaining below the website header.
@@ -42,9 +43,11 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
   }, []);
 
   useLayoutEffect(() => {
+    setMounted(true);
+
     // Set initial height synchronously to prevent layout shift
     setHeroHeight("100dvh");
-    
+
     // Small delay to ensure DOM is ready
     const rafId = window.requestAnimationFrame(() => {
       updateHeroHeight();
@@ -127,7 +130,7 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
       ref={sectionRef}
       aria-label="Featured collections"
       aria-roledescription="carousel"
-      style={{ height: heroHeight }}
+      style={{ height: heroHeight, minHeight: "100dvh" }}
       className="relative w-full overflow-hidden bg-slate-100"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
@@ -177,7 +180,7 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
             <div
               key={slide.id}
               aria-hidden={!isActive}
-              className={`absolute inset-0 flex items-center px-7 pb-14 pt-6 transition-all duration-700 ease-out sm:px-10 md:px-12 lg:px-[68px] ${
+              className={`absolute inset-0 flex items-center px-7 pb-12 ${mounted ? 'pt-0' : 'pt-2'} transition-all duration-700 ease-out sm:px-10 md:px-12 lg:px-[68px] ${
                 isActive
                   ? "translate-y-0 opacity-100"
                   : "pointer-events-none translate-y-5 opacity-0"
@@ -185,37 +188,37 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
             >
               <div className="w-full max-w-[760px]">
                 {slide.eyebrow && (
-                  <span className="mb-5 inline-flex items-center rounded-full border border-orange-400/70 bg-orange-200/45 px-5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-orange-600 backdrop-blur-sm sm:mb-6 sm:px-6 sm:py-2.5 sm:text-sm lg:mb-7 lg:text-base">
+                  <span className="mb-4 inline-flex items-center rounded-full border border-orange-400/70 bg-orange-200/45 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-orange-600 backdrop-blur-sm sm:mb-5 sm:px-5 sm:py-2 sm:text-xs">
                     {slide.eyebrow}
                   </span>
                 )}
 
-                <h1 className="max-w-[760px] text-[clamp(2.35rem,5vw,5.15rem)] font-extrabold leading-[0.98] tracking-[-0.045em] text-slate-950">
-                  {slide.title}
+<h1 className="max-w-[760px] text-[clamp(2.35rem,5vw,5.15rem)] font-serif font-extrabold leading-[0.98] tracking-[-0.045em] text-gray-900">
+                    {slide.title}
 
-                  {slide.titleHighlight && (
-                    <span className="block">{slide.titleHighlight}</span>
+                    {slide.titleHighlight && (
+                      <span className="block text-[#ea580c]">{slide.titleHighlight}</span>
+                    )}
+                  </h1>
+
+                  {slide.description && (
+                    <p className="mt-5 max-w-[680px] text-[clamp(1rem,1.55vw,1.7rem)] font-serif leading-relaxed text-gray-700 sm:mt-6">
+                      {slide.description}
+                    </p>
                   )}
-                </h1>
-
-                {slide.description && (
-                  <p className="mt-5 max-w-[680px] text-[clamp(1rem,1.55vw,1.7rem)] leading-relaxed text-slate-700 sm:mt-6">
-                    {slide.description}
-                  </p>
-                )}
 
                 {(slide.ctaPrimaryLabel || slide.ctaSecondaryLabel) && (
-                  <div className="mt-7 flex flex-wrap items-center gap-3 sm:mt-8 sm:gap-4 lg:mt-9">
+                  <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-7 sm:gap-3">
                     {slide.ctaPrimaryLabel && (
                       <Link
                         href={slide.ctaPrimaryHref || "#"}
                         tabIndex={isActive ? 0 : -1}
-                        className="group inline-flex min-h-14 items-center justify-center gap-3 bg-orange-500 px-7 text-sm font-bold text-white shadow-[0_14px_30px_rgba(249,115,22,0.28)] transition-all duration-300 hover:-translate-y-1 hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:min-h-16 sm:px-9 sm:text-base lg:text-lg"
+                        className="group inline-flex min-h-12 items-center justify-center gap-2 bg-orange-500 px-5 text-xs font-bold text-white shadow-[0_14px_30px_rgba(249,115,22,0.28)] transition-all duration-300 hover:-translate-y-1 hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:min-h-13 sm:px-6 sm:text-sm"
                       >
                         {slide.ctaPrimaryLabel}
                         <span
                           aria-hidden="true"
-                          className="text-2xl leading-none transition-transform duration-300 group-hover:translate-x-1"
+                          className="text-xl leading-none transition-transform duration-300 group-hover:translate-x-1"
                         >
                           →
                         </span>
@@ -226,7 +229,7 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
                       <Link
                         href={slide.ctaSecondaryHref || "#"}
                         tabIndex={isActive ? 0 : -1}
-                        className="inline-flex min-h-14 items-center justify-center border border-white/60 bg-white/65 px-7 text-sm font-bold text-slate-800 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:min-h-16 sm:px-9 sm:text-base"
+                        className="inline-flex min-h-12 items-center justify-center border border-white/60 bg-white/65 px-5 text-xs font-bold text-slate-800 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:min-h-13 sm:px-6 sm:text-sm"
                       >
                         {slide.ctaSecondaryLabel}
                       </Link>
@@ -246,18 +249,18 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
             type="button"
             onClick={prev}
             aria-label="Previous slide"
-            className="group absolute left-0 top-1/2 z-30 flex h-20 w-11 -translate-y-1/2 items-center justify-center rounded-r-2xl border border-white/30 bg-white/20 text-white shadow-lg backdrop-blur-[3px] transition-all duration-300 hover:bg-white/35 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:h-24 sm:w-14 lg:h-28 lg:w-[68px]"
+            className={`group absolute left-0 ${mounted ? 'top-[45%]' : 'top-1/2'} z-30 flex ${mounted ? 'h-16 w-10' : 'h-20 w-11'} -translate-y-1/2 items-center justify-center rounded-r-xl text-white transition-all duration-300 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:h-20 sm:w-12 lg:h-24 lg:w-14`}
           >
-            <ChevronLeft className="h-7 w-7 transition-transform duration-300 group-hover:-translate-x-1 sm:h-8 sm:w-8 lg:h-9 lg:w-9" />
+            <ChevronLeft className={`${mounted ? 'h-6 w-6' : 'h-7 w-7'} transition-transform duration-300 group-hover:-translate-x-1 sm:h-7 sm:w-7 lg:h-8 lg:w-8`} />
           </button>
 
           <button
             type="button"
             onClick={next}
             aria-label="Next slide"
-            className="group absolute right-0 top-1/2 z-30 flex h-20 w-11 -translate-y-1/2 items-center justify-center rounded-l-2xl border border-white/30 bg-white/20 text-white shadow-lg backdrop-blur-[3px] transition-all duration-300 hover:bg-white/35 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:h-24 sm:w-14 lg:h-28 lg:w-[68px]"
+            className={`group absolute right-0 ${mounted ? 'top-[45%]' : 'top-1/2'} z-30 flex ${mounted ? 'h-16 w-10' : 'h-20 w-11'} -translate-y-1/2 items-center justify-center rounded-l-xl text-white transition-all duration-300 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 sm:h-20 sm:w-12 lg:h-24 lg:w-14`}
           >
-            <ChevronRight className="h-7 w-7 transition-transform duration-300 group-hover:translate-x-1 sm:h-8 sm:w-8 lg:h-9 lg:w-9" />
+            <ChevronRight className={`${mounted ? 'h-6 w-6' : 'h-7 w-7'} transition-transform duration-300 group-hover:translate-x-1 sm:h-7 sm:w-7 lg:h-8 lg:w-8`} />
           </button>
         </>
       )}

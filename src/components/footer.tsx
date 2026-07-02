@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export function Footer() {
   return (
-    <footer className="bg-[#1a1308] border-t border-[#d8a928]/30">
+    <footer className=" bg-[#d8a928]/20 border-t border-[#d8a928]/30">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
           {/* Brand / Logo */}
@@ -20,18 +20,18 @@ export function Footer() {
               />
             </Link>
 
-            <p className="text-sm text-[#fcf5e8] leading-relaxed max-w-xs">
+            <p className="text-sm text-gray-600 leading-relaxed max-w-xs">
               Your Trusted Tech Destination — premium laptops, gaming gear, and accessories with genuine warranty support.
             </p>
 
             <div className="flex space-x-4">
-              <Link href="#" className="text-[#fcf5e8] hover:text-[#d8a928] transition-colors">
+              <Link href="#" className="text-[#d8a928] hover:text-[#b57910] transition-colors">
                 <Facebook className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-[#fcf5e8] hover:text-[#d8a928] transition-colors">
+              <Link href="#" className="text-[#d8a928] hover:text-[#b57910] transition-colors">
                 <Instagram className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-[#fcf5e8] hover:text-[#d8a928] transition-colors">
+              <Link href="#" className="text-[#d8a928] hover:text-[#b57910] transition-colors">
                 <Twitter className="h-5 w-5" />
               </Link>
             </div>
@@ -39,30 +39,30 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-sm font-semibold leading-6 text-[#fcf5e8]">Shop</h3>
+            <h3 className="text-sm font-semibold leading-6 text-gray-900">Shop</h3>
             <ul role="list" className="mt-4 space-y-2">
               <li>
-                <Link href="/collections" className="text-sm text-[#fcf5e8]/85 hover:text-[#fcf5e8] transition-colors">
+                <Link href="/collections" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   All Products
                 </Link>
               </li>
               <li>
-                <Link href="/category/gaming-laptops" className="text-sm text-[#fcf5e8]/85 hover:text-[#d8a928] transition-colors">
+                <Link href="/category/gaming-laptops" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   Gaming Laptops
                 </Link>
               </li>
               <li>
-                <Link href="/category/business-laptops" className="text-sm text-[#fcf5e8]/85 hover:text-[#d8a928] transition-colors">
+                <Link href="/category/business-laptops" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   Business Laptops
                 </Link>
               </li>
               <li>
-                <Link href="/category/accessories" className="text-sm text-[#fcf5e8]/85 hover:text-[#d8a928] transition-colors">
+                <Link href="/category/accessories" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   Accessories
                 </Link>
               </li>
               <li>
-                <Link href="/collections/hot-deals" className="text-sm text-[#fcf5e8]/85 hover:text-[#d8a928] transition-colors">
+                <Link href="/collections/hot-deals" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   Hot Deals
                 </Link>
               </li>
@@ -71,41 +71,41 @@ export function Footer() {
 
           {/* Customer Care */}
           <div>
-            <h3 className="text-sm font-semibold leading-6 text-[#fcf5e8]">Customer Care</h3>
+            <h3 className="text-sm font-semibold leading-6 text-gray-900">Customer Care</h3>
             <ul role="list" className="mt-4 space-y-2">
               <li>
-                <Link href="/admin/login" className="text-sm text-[#fcf5e8]/85 hover:text-[#d8a928] transition-colors">
+                <Link href="/admin/login" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   Login
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-sm text-[#fcf5e8]/85 hover:text-[#d8a928] transition-colors">
+                <Link href="/contact" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   Contact Us
                 </Link>
               </li>
-               
+              
               <li>
-                <Link href="/about-us" className="text-sm text-[#fcf5e8]/85 hover:text-[#d8a928] transition-colors">
+                <Link href="/about-us" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-sm text-[#fcf5e8]/85 hover:text-[#d8a928] transition-colors">
+                <Link href="/faq" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   FAQs
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-sm text-[#fcf5e8]/85 hover:text-[#d8a928] transition-colors">
+                <Link href="/privacy" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-sm text-[#fcf5e8]/85 hover:text-[#d8a928] transition-colors">
+                <Link href="/terms" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link href="/refund-policy" className="text-sm text-[#fcf5e8]/85 hover:text-[#d8a928] transition-colors">
+                <Link href="/refund-policy" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                   Refund Policy
                 </Link>
               </li>
@@ -114,11 +114,11 @@ export function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-sm font-semibold leading-6 text-[#fcf5e8] mb-4">Contact Us</h3>
-            <div className="space-y-4 text-sm text-[#fcf5e8]/85">
+            <h3 className="text-sm font-semibold leading-6 text-gray-900 mb-4">Contact Us</h3>
+            <div className="space-y-4 text-sm text-gray-600">
               <div className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 text-[#d8a928] shrink-0" />
-                <span>Swabi Topi Road, Pakistan</span>
+                <span>Sardri Bazar Charsadda Mardan Road KPK Pakistan | All Pakistan delivery available</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-[#d8a928] shrink-0" />
@@ -133,7 +133,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 border-t border-[#d8a928]/30 pt-8">
-          <p className="text-center text-xs leading-5 text-[#fcf5e8]/75">
+          <p className="text-center text-xs leading-5 text-gray-600">
             &copy; {new Date().getFullYear()} MM Laptop Center. All rights reserved.
           </p>
         </div>

@@ -35,10 +35,33 @@ interface Collection {
   image: string | null;
 }
 
-interface Props {
-  categories: Category[];
-  products: Product[];
-  collections: Collection[];
+export function CategoriesSection({ categories }: { categories: Category[] }) {
+  return (
+    <section className="lg:mx-auto lg:w-full lg:max-w-7xl lg:px-8 bg-white mt-6 relative z-20">
+         
+      <div className="flex gap-6 overflow-hidden relative">
+        <div className="flex gap-6 animate-scroll scrollbar-hide px-6 lg:px-8">
+           {[...categories, ...categories].map((category, idx) => (
+             <Link
+               key={`${category.id}-${idx}`}
+               href="/products"
+               className="group flex flex-col items-center flex-shrink-0"
+             >
+              <div className="relative h-24 w-24 sm:h-28 sm:w-28 lg:h-32 lg:w-32">
+                <Image
+                  src={category.image || FALLBACK_IMAGE}
+                  alt={category.name}
+                  fill
+                  className="object-contain transition-transform duration-300 group-hover:scale-110"
+                />
+              </div>
+               <span className="mt-2 sm:mt-3 text-center text-xs font-bold uppercase text-gray-800">{category.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+    </section>
+  );
 }
 
 function CollectionSlider({ collections }: { collections: Collection[] }) {
@@ -111,7 +134,7 @@ function CollectionSlider({ collections }: { collections: Collection[] }) {
   );
 }
 
-export function HomeProducts({ categories, products, collections }: Props) {
+export function ProductsSection({ categories, products, collections }: { categories: Category[]; products: Product[]; collections: Collection[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   const featuredProducts = products.filter(p => p.isFeatured);
@@ -132,36 +155,12 @@ export function HomeProducts({ categories, products, collections }: Props) {
 
   const selectedCat = categories.find(c => c.slug === selectedCategory);
 
-  return (
+return (
     <>
-      <section className="lg:mx-auto lg:w-full lg:max-w-7xl lg:px-8 md:my-2">
-        <div className="flex gap-6 overflow-hidden relative">
-          <div className="flex gap-6 animate-scroll scrollbar-hide">
-             {[...categories, ...categories].map((category, idx) => (
-               <Link
-                 key={`${category.id}-${idx}`}
-                 href="/products"
-                 className="group flex flex-col items-center flex-shrink-0"
-               >
-                <div className="relative h-24 w-24 sm:h-28 sm:w-28 lg:h-32 lg:w-32">
-                  <Image
-                    src={category.image || FALLBACK_IMAGE}
-                    alt={category.name}
-                    fill
-                    className="object-contain transition-transform duration-300 group-hover:scale-110"
-                  />
-                </div>
-                 <span className="mt-2 sm:mt-3 text-center text-xs font-bold uppercase text-[#0a0a0a]">{category.name}</span>
-               </Link>
-             ))}
-           </div>
-        </div>
-      </section>
-
       {selectedCategory && filteredProducts.length > 0 && (
-        <section className="mx-auto w-full max-w-7xl px-6 lg:px-8">
+        <section className="mx-auto w-full max-w-7xl px-6 lg:px-8 bg-white py-16">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-[#0a0a0a]">{selectedCat?.name} Products</h2>
+            <h2 className="font-serif text-2xl font-bold text-gray-900">{selectedCat?.name} Products</h2>
             <button onClick={() => setSelectedCategory("")} className="text-sm font-semibold text-[#f6a45d] hover:underline">
               Clear Filter
             </button>
@@ -194,9 +193,9 @@ export function HomeProducts({ categories, products, collections }: Props) {
       )}
 
       {(!selectedCategory || otherProducts.length > 0) && (
-        <section className="bg-[#f5f5f5] mx-auto w-full max-w-7xl px-6 lg:px-8">
+        <section className="bg-white mx-auto w-full max-w-7xl px-6 lg:px-8 py-16">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-[#0a0a0a]">
+            <h2 className="font-serif text-2xl font-bold text-gray-900">
               {selectedCategory ? "Other Products" : "Featured Products"}
             </h2>
             <Link href="/products" className="text-sm font-semibold text-[#f6a45d] hover:underline">
@@ -230,8 +229,15 @@ export function HomeProducts({ categories, products, collections }: Props) {
         </section>
       )}
 
-      <section className="mx-auto w-full max-w-7xl px-6 lg:px-8">
-        <h2 className="mb-6 text-2xl font-bold text-[#0a0a0a]">Collections</h2>
+      <section className="mx-auto w-full max-w-7xl px-6 lg:px-8 py-16 bg-gray-50">
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+          <span className="inline-flex rounded-full bg-[#ffedd5] px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#ea580c]">
+            Collections
+          </span>
+          <h2 className="font-serif text-3xl font-extrabold text-gray-900 sm:text-4xl lg:text-5xl">
+            Curated Collections
+          </h2>
+        </div>
         <CollectionSlider collections={collections} />
       </section>
     </>

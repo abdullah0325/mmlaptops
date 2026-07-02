@@ -1,12 +1,10 @@
-import { Card, CardContent } from "@esmate/shadcn/components/ui/card";
 import { Laptop, Gamepad2, Briefcase } from "@esmate/shadcn/pkgs/lucide-react";
 import BlogSection from "@/components/blog-section";
-import EssenceSection from "@/components/EssenceSection";
 import Testimonials from "@/components/Testimonials";
 import HeroSection from "@/components/HeroSection";
 import { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
-import { HomeProducts } from "@/components/home-products";
+import { CategoriesSection, ProductsSection } from "@/components/home-products";
 
 export const dynamic = "force-dynamic";
 
@@ -109,7 +107,7 @@ export default async function Page() {
       () => prisma.blogPost.findMany({
         where: { status: "published", isFeatured: true },
         orderBy: { publishedAt: "desc" },
-        take: 3,
+        take: 20,
         select: { id: true, title: true, slug: true, excerpt: true, featuredImage: true, publishedAt: true, content: true },
       }),
       [],
@@ -125,91 +123,144 @@ export default async function Page() {
   ]);
 
 return (
-      <>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      <div className="flex flex-col gap-4 bg-gray-50">
-        <HeroSection />
-        <h1 className="sr-only">MM Laptop Center – Premium Laptops, Gaming Gear & Tech Accessories</h1>
-       <HomeProducts categories={categories} products={featuredProducts} collections={featuredCollections} />
+       <>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+        <div className="flex flex-col bg-gray-50">
+          <HeroSection />
+          <h1 className="sr-only">MM Laptop Center – Premium Laptops, Gaming Gear & Tech Accessories</h1>
+         
+          <CategoriesSection categories={categories} />
 
-      {/* Why Choose Us Section */}
-      <section className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center mb-16">
-          <h2 className="text-3xl font-bold tracking-tight text-[#0a0a0a] sm:text-4xl">
-            Why Choose MM Laptop Center
-          </h2>
-          <p className="mt-4 text-lg text-[#5A5E55]">
-            Your trusted destination for genuine laptops and tech accessories.
-          </p>
-        </div>
+          <ProductsSection categories={categories} products={featuredProducts} collections={featuredCollections} />
+       
+        {/* Why Choose Us Section - matching About page styling */}
+       <section className="bg-white px-6 py-10 lg:px-4 lg:py-14">
+          <div className="mx-auto max-w-7xl">
+            <div className="text-center max-w-3xl mx-auto mb-5 space-y-4">
+              <span className="inline-flex rounded-full bg-[#ffedd5] px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#ea580c]">
+                Why Choose Us
+              </span>
+              <h2 className="font-serif text-3xl font-extrabold text-gray-900 sm:text-4xl lg:text-5xl">
+                Why Choose MM Laptop Center
+              </h2>
+              <p className="text-gray-600 text-base sm:text-lg">
+                Your trusted destination for genuine laptops and tech accessories.
+              </p>
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card className="bg-white border-[#d8a928]/30 hover:border-[#f6a45d]/60 transition-colors duration-300">
-            <CardContent className="p-8 space-y-4">
-              <div className="h-12 w-12 rounded-xl bg-[#fcf5e8] flex items-center justify-center text-[#f6a45d]">
-                <Gamepad2 className="h-7 w-7" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="rounded-3xl bg-white p-8 border border-[#d8a928]/20 shadow-lg hover:border-[#f6a45d] transition-all">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#ffedd5] text-[#ea580c]">
+                  <Gamepad2 className="h-5 w-5" />
+                </div>
+                <h3 className="font-serif mt-4 text-xl font-bold text-gray-950">Gaming Laptops</h3>
+                <ul className="mt-3 space-y-2 text-gray-600 leading-relaxed text-sm">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    Latest NVIDIA RTX & AMD GPUs
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    High-refresh rate displays up to 165Hz
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    Advanced cooling for extended sessions
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    RGB keyboards and premium audio
+                  </li>
+                </ul>
               </div>
-              <h3 className="text-xl font-bold text-[#0a0a0a]">Gaming Laptops</h3>
-              <ul className="space-y-2 text-[#5A5E55] list-disc pl-4">
-                <li>Latest NVIDIA RTX & AMD GPUs</li>
-                <li>High-refresh rate displays up to 165Hz</li>
-                <li>Advanced cooling for extended sessions</li>
-                <li>RGB keyboards and premium audio</li>
-              </ul>
-            </CardContent>
-          </Card>
 
-          <Card className="bg-white border-[#d8a928]/30 hover:border-[#f6a45d]/60 transition-colors duration-300">
-            <CardContent className="p-8 space-y-4">
-              <div className="h-12 w-12 rounded-xl bg-[#fcf5e8] flex items-center justify-center text-[#f6a45d]">
-                <Briefcase className="h-7 w-7" />
+              <div className="rounded-3xl bg-white p-8 border border-[#d8a928]/20 shadow-lg hover:border-[#f6a45d] transition-all">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#ffedd5] text-[#ea580c]">
+                  <Briefcase className="h-5 w-5" />
+                </div>
+                <h3 className="font-serif mt-4 text-xl font-bold text-gray-950">Business Laptops</h3>
+                <ul className="mt-3 space-y-2 text-gray-600 leading-relaxed text-sm">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    Enterprise-grade security features
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    All-day battery life for remote work
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    Lightweight designs under 1.5kg
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    Premium build with MIL-STD durability
+                  </li>
+                </ul>
               </div>
-              <h3 className="text-xl font-bold text-[#0a0a0a]">Business Laptops</h3>
-              <ul className="space-y-2 text-[#5A5E55] list-disc pl-4">
-                <li>Enterprise-grade security features</li>
-                <li>All-day battery life for remote work</li>
-                <li>Lightweight designs under 1.5kg</li>
-                <li>Premium build with MIL-STD durability</li>
-              </ul>
-            </CardContent>
-          </Card>
 
-          <Card className="bg-white border-[#d8a928]/30 hover:border-[#f6a45d]/60 transition-colors duration-300">
-            <CardContent className="p-8 space-y-4">
-              <div className="h-12 w-12 rounded-xl bg-[#fcf5e8] flex items-center justify-center text-[#f6a45d]">
-                <Laptop className="h-7 w-7" />
+              <div className="rounded-3xl bg-white p-8 border border-[#d8a928]/20 shadow-lg hover:border-[#f6a45d] transition-all">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#ffedd5] text-[#ea580c]">
+                  <Laptop className="h-5 w-5" />
+                </div>
+                <h3 className="font-serif mt-4 text-xl font-bold text-gray-950">Accessories & More</h3>
+                <ul className="mt-3 space-y-2 text-gray-600 leading-relaxed text-sm">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    Monitors, keyboards, and mice
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    Laptop bags and protective sleeves
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    USB-C hubs and docking stations
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#d8a928] font-bold">•</span>
+                    Genuine warranty on all products
+                  </li>
+                </ul>
               </div>
-              <h3 className="text-xl font-bold text-[#0a0a0a]">Accessories & More</h3>
-              <ul className="space-y-2 text-[#5A5E55] list-disc pl-4">
-                <li>Monitors, keyboards, and mice</li>
-                <li>Laptop bags and protective sleeves</li>
-                <li>USB-C hubs and docking stations</li>
-                <li>Genuine warranty on all products</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-       </section>
+            </div>
+         </div>
+        </section>
+
+{/* Blog Section - matching About page styling */}
+         <section className="bg-white px-6 py-10 lg:px-4 lg:py-14">
+          <div className="mx-auto max-w-7xl">
+            <BlogSection articles={featuredBlogs.map(b => ({
+              id: b.id,
+              title: b.title,
+              handle: b.slug,
+              publishedAt: b.publishedAt?.toISOString() ?? "",
+              content: b.content ?? "",
+              image: b.featuredImage ? { url: b.featuredImage } : null,
+              blogHandle: "news"
+            }))} />
+          </div>
+        </section>
 
 
-        {/* Blog */}
-       <BlogSection articles={featuredBlogs.map(b => ({
-         id: b.id,
-         title: b.title,
-         handle: b.slug,
-         publishedAt: b.publishedAt?.toISOString() ?? "",
-         content: b.content ?? "",
-         image: b.featuredImage ? { url: b.featuredImage } : null,
-         blogHandle: "news"
-       }))} />
+        {/* Testimonials Section */}
+        <section className="bg-gray-150 px-6 py-10 lg:px-4 lg:py-14">
+          <div className="mx-auto max-w-7xl">
+            <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+              <span className="inline-flex rounded-full bg-[#ffedd5] px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#ea580c]">
+                Customer Voices
+              </span>
 
-       {/* Testimonials */}
-       <Testimonials />
-    </div>
+             
+            </div>
+
+            <Testimonials />
+          </div>
+        </section>
+      </div>
     </>
   );
 }
-

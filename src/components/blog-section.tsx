@@ -54,7 +54,7 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
     const scrollEl = scrollRef.current
     if (!scrollEl) return
 
-    const cardWidth = scrollEl.clientWidth / 2.5
+    const cardWidth = scrollEl.clientWidth / 4
     scrollEl.scrollBy({ left: -cardWidth, behavior: "smooth" })
   }, [])
 
@@ -62,7 +62,7 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
     const scrollEl = scrollRef.current
     if (!scrollEl) return
 
-    const cardWidth = scrollEl.clientWidth / 2.5
+    const cardWidth = scrollEl.clientWidth / 4
     scrollEl.scrollBy({ left: cardWidth, behavior: "smooth" })
   }, [])
 
@@ -70,7 +70,7 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
    * Auto-advance: scroll to show next set of articles every 5 seconds
    */
   useEffect(() => {
-    if (articles.length <= 3 || isPaused) return
+    if (articles.length <= 4 || isPaused) return
 
     const timer = window.setInterval(() => {
       const scrollEl = scrollRef.current
@@ -83,7 +83,7 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
         // Reset to beginning
         scrollEl.scrollTo({ left: 0, behavior: "smooth" })
       } else {
-        const cardWidth = clientWidth / 2.5
+        const cardWidth = clientWidth / 4
         scrollEl.scrollBy({ left: cardWidth, behavior: "smooth" })
       }
     }, AUTOPLAY_MS)
@@ -92,27 +92,32 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
   }, [isPaused, articles.length])
 
   return (
-    <section className="py-16 sm:py-20">
+    <section className="py-8 sm:py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-semibold sm:text-4xl">
+        {/* Header - matching about page styling */}
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+          <span className="inline-flex rounded-full bg-[#ffedd5] px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#ea580c]">
+            Latest Articles
+          </span>
+          <h2 className="font-serif text-3xl font-extrabold text-gray-900 sm:text-4xl lg:text-5xl">
             Latest Articles
           </h2>
-          <p className="mt-3 text-base text-muted-foreground sm:text-lg">
+          <p className="text-gray-600 text-base sm:text-lg">
             Helpful reads and insights about laptops, gaming, and tech accessories.
           </p>
         </div>
 
-        {/* Horizontal scrollable carousel */}
+        {/* Blog grid or horizontal scrollable carousel */}
         <div className="relative mt-12">
           <div
             ref={scrollRef}
-            className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-4 sm:gap-5"
-            style={{ scrollSnapType: "x mandatory", scrollBehavior: "smooth" }}
+            className={articles.length > 4
+              ? "flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-4 sm:gap-5"
+              : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"}
+            style={articles.length > 4 ? { scrollSnapType: "x mandatory", scrollBehavior: "smooth" } : undefined}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
-            onScroll={checkScrollPosition}
+            onScroll={articles.length > 4 ? checkScrollPosition : undefined}
           >
             {articles.map((article) => {
               const text = article.content?.replace(/<[^>]+>/g, "").trim() ?? ""
@@ -120,7 +125,9 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
               return (
                 <div
                   key={article.id}
-                  className="flex min-w-[300px] max-w-[300px] sm:min-w-[280px] sm:max-w-[280px] md:min-w-[300px] md:max-w-[300px] lg:min-w-[280px] lg:max-w-[280px] xl:min-w-[300px] xl:max-w-[300px] flex-shrink-0 snap-start items-stretch"
+                  className={articles.length > 4
+                    ? "flex min-w-[220px] max-w-[220px] sm:min-w-[240px] sm:max-w-[240px] md:min-w-[260px] md:max-w-[260px] lg:min-w-[280px] lg:max-w-[280px] xl:min-w-[300px] xl:max-w-[300px] flex-shrink-0 snap-start items-stretch"
+                    : "flex flex-col items-stretch"}
                 >
                   <div className="group relative w-full overflow-hidden rounded-xl bg-background shadow-sm transition-shadow hover:shadow-md flex flex-col">
                     {/* Image */}
@@ -179,7 +186,7 @@ export default function BlogSection({ articles: initialArticles }: BlogSectionPr
           </div>
 
           {/* Navigation arrows */}
-          {articles.length > 3 && (
+          {articles.length > 4 && (
             <>
               {showLeftArrow && (
                 <button

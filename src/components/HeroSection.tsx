@@ -11,7 +11,7 @@ export default async function HeroSection() {
   }
 
   return (
-    <div className="relative w-full" style={{ height: "100dvh" }}>
+    <div className="relative w-full overflow-hidden" style={{ minHeight: "85dvh", maxHeight: "85dvh" }}>
       <HeroCarousel slides={slides} />
     </div>
   );

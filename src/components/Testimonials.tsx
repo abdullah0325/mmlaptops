@@ -54,64 +54,52 @@ const Testimonials = () => {
   const swiperRef = useRef<any>(null);
 
   return (
-    <section className="bg-white py-16">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center mb-12">
-          <h2 className="text-3xl font-bold tracking-tight text-[#0a0a0a] sm:text-4xl">
-            Customer Testimonials
-          </h2>
-          <p className="mt-4 text-lg text-[#5A5E55]">
-            Hear from laptop buyers across Pakistan
-          </p>
-        </div>
+    
+    <div className="relative">
+      <button
+        onClick={() => swiperRef.current?.slidePrev()}
+        className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-[#fcf5e8] p-2 shadow-md hover:bg-[#f6a45d] hover:text-white transition hidden md:block"
+        aria-label="Previous"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
 
-        <div className="relative">
-          <button
-            onClick={() => swiperRef.current?.slidePrev()}
-            className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-[#fcf5e8] p-2 shadow-md hover:bg-[#f6a45d] hover:text-white transition hidden md:block"
-            aria-label="Previous"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
+      <Swiper
+        onSwiper={(swiper) => { swiperRef.current = swiper; }}
+        modules={[Autoplay]}
+        spaceBetween={24}
+        slidesPerView={1}
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        breakpoints={{
+          640: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 },
+        }}
+        className="px-8"
+      >
+        {testimonials.map((t, i) => (
+          <SwiperSlide key={i}>
+            <div className="rounded-xl border border-[#d8a928]/20 bg-[#fcf5e8] p-6 h-full">
+              <div className="flex gap-1 mb-3">
+                {Array.from({ length: 5 }).map((_, j) => (
+                  <span key={j} className="text-[#d8a928] text-lg">★</span>
+                ))}
+              </div>
+              <p className="text-[#5A5E55] mb-4 text-sm leading-relaxed">&quot;{t.text}&quot;</p>
+              <p className="font-semibold text-[#0a0a0a]">{t.name}</p>
+              <p className="text-xs text-[#5A5E55]">{t.role}</p>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
-          <Swiper
-            onSwiper={(swiper) => { swiperRef.current = swiper; }}
-            modules={[Autoplay]}
-            spaceBetween={24}
-            slidesPerView={1}
-            autoplay={{ delay: 4000, disableOnInteraction: false }}
-            breakpoints={{
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-            }}
-            className="px-8"
-          >
-            {testimonials.map((t, i) => (
-              <SwiperSlide key={i}>
-                <div className="rounded-xl border border-[#d8a928]/20 bg-[#fcf5e8] p-6 h-full">
-                  <div className="flex gap-1 mb-3">
-                    {Array.from({ length: 5 }).map((_, j) => (
-                      <span key={j} className="text-[#d8a928] text-lg">★</span>
-                    ))}
-                  </div>
-                  <p className="text-[#5A5E55] mb-4 text-sm leading-relaxed">"{t.text}"</p>
-                  <p className="font-semibold text-[#0a0a0a]">{t.name}</p>
-                  <p className="text-xs text-[#5A5E55]">{t.role}</p>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          <button
-            onClick={() => swiperRef.current?.slideNext()}
-            className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-[#fcf5e8] p-2 shadow-md hover:bg-[#f6a45d] hover:text-white transition hidden md:block"
-            aria-label="Next"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
-    </section>
+      <button
+        onClick={() => swiperRef.current?.slideNext()}
+        className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-[#fcf5e8] p-2 shadow-md hover:bg-[#f6a45d] hover:text-white transition hidden md:block"
+        aria-label="Next"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </button>
+    </div>
   );
 };
 
