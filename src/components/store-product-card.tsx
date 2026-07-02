@@ -76,6 +76,11 @@ export function StoreProductCard({
   const [reviewStats, setReviewStats] = useState<ReviewStats | null>(null);
   const { linesAdd } = useCart();
 
+  // ── Slide transition state ──
+  const [currentImg, setCurrentImg] = useState<string | null>(null);
+  const [incomingImg, setIncomingImg] = useState<string | null>(null);
+  const [slideIn, setSlideIn] = useState(false);
+
   const productImages = useMemo(() => {
     const urls = [featuredImageUrl, ...(imageUrls || [])]
       .filter((url): url is string => typeof url === "string" && url.trim().length > 0)
@@ -85,8 +90,7 @@ export function StoreProductCard({
     return urls.length > 0 ? urls : [FALLBACK_IMAGE];
   }, [featuredImageUrl, imageUrls, failedImages]);
 
-  const displayImageIndex =
-    isImageHovered && productImages.length > 1 ? 1 : activeImageIndex % productImages.length;
+  const displayImageIndex = activeImageIndex % productImages.length;
   const displayImage = productImages[displayImageIndex] || FALLBACK_IMAGE;
 
   const effectiveVariantId = variantId || productId;
@@ -117,6 +121,44 @@ export function StoreProductCard({
     setActiveImageIndex(0);
     setFailedImages([]);
   }, [featuredImageUrl, imageUrls]);
+
+  // ── Slide transition: new image glides in from the right, old one glides out to the left ──
+  useEffect(() => {
+    // First image ever — just set it, no animation needed.
+    if (currentImg === null) {
+      setCurrentImg(displayImage);
+      return;
+    }
+    if (displayImage === currentImg || displayImage === incomingImg) return;
+
+    setIncomingImg(displayImage);
+    setSlideIn(false);
+
+    // Kick the animation off on the next paint so the browser registers the
+    // starting (off-screen) position before we transition to the ending
+    // position — otherwise it can appear to "snap" instead of sliding.
+    const raf = requestAnimationFrame(() => {
+      // Force a layout read so the browser commits the starting transform
+      // before we flip the class that starts the transition.
+      void document.body.offsetHeight;
+      setSlideIn(true);
+    });
+
+    // Match this to the transition duration below (ms). Kept in sync with
+    // the Tailwind `duration-700` class used on the sliding layers.
+    const SLIDE_DURATION = 700;
+    const timeout = setTimeout(() => {
+      setCurrentImg(displayImage);
+      setIncomingImg(null);
+      setSlideIn(false);
+    }, SLIDE_DURATION);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timeout);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [displayImage]);
 
   useEffect(() => {
     if (productImages.length <= 1 || isImageHovered) return;
@@ -152,7 +194,7 @@ export function StoreProductCard({
   };
 
   return (
-    <div className="group relative flex flex-col rounded-2xl bg-white overflow-hidden transition-shadow duration-200 hover:shadow-lg">
+    <div className="group relative flex flex-col border border-black rounded-2xl bg-white overflow-hidden transition-shadow duration-200 hover:shadow-lg">
 
       {/* ── Tag badge ─────────────────────────────────────── */}
       {tag && (
@@ -181,19 +223,49 @@ export function StoreProductCard({
         onFocus={() => setIsImageHovered(true)}
         onBlur={() => setIsImageHovered(false)}
       >
-        <Image
-          key={displayImage}
-          src={displayImage}
-          alt={title}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-contain p-5 transition duration-300 group-hover:scale-105"
-          onError={() =>
-            setFailedImages((current) =>
-              current.includes(displayImage) ? current : [...current, displayImage]
-            )
-          }
-        />
+        {/* Current image — slides out to the left once a new image starts coming in */}
+        <div
+          className={`absolute inset-0 transition-transform duration-700 ease-in-out will-change-transform ${
+            incomingImg && slideIn ? "-translate-x-full" : "translate-x-0"
+          }`}
+        >
+          {currentImg && (
+            <Image
+              src={currentImg}
+              alt={title}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="object-contain p-5 transition duration-300 group-hover:scale-105"
+              onError={() =>
+                setFailedImages((current) =>
+                  current.includes(currentImg) ? current : [...current, currentImg]
+                )
+              }
+            />
+          )}
+        </div>
+
+        {/* Incoming image — starts fully off-screen to the right, glides in slowly */}
+        {incomingImg && (
+          <div
+            className={`absolute inset-0 transition-transform duration-700 ease-in-out will-change-transform ${
+              slideIn ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            <Image
+              src={incomingImg}
+              alt={title}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="object-contain p-5"
+              onError={() =>
+                setFailedImages((current) =>
+                  current.includes(incomingImg) ? current : [...current, incomingImg]
+                )
+              }
+            />
+          </div>
+        )}
       </Link>
 
       {/* ── Card body ─────────────────────────────────────── */}
