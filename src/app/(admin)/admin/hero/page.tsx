@@ -256,6 +256,9 @@ export default function HeroAdminPage() {
                         if (!file) return;
                         const formData = new FormData();
                         formData.append("file", file);
+                        if (editingSlide) {
+                          formData.append("slideId", editingSlide.id);
+                        }
                         const res = await fetch("/api/admin/hero/upload", {
                           method: "POST",
                           body: formData,
@@ -263,6 +266,9 @@ export default function HeroAdminPage() {
                         const data = await res.json();
                         if (res.ok && data.url) {
                           setFormValues((v) => ({ ...v, imageUrl: data.url }));
+                          if (editingSlide) {
+                            fetchSlides();
+                          }
                         }
                       }}
                       className="hidden"
