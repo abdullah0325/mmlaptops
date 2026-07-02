@@ -161,14 +161,14 @@ export function StoreProductCard({
   }, [displayImage]);
 
   useEffect(() => {
-    if (productImages.length <= 1 || isImageHovered) return;
+    if (productImages.length <= 1) return;
 
     const interval = window.setInterval(() => {
       setActiveImageIndex((current) => (current + 1) % productImages.length);
-    }, 4000);
+    }, 10000);
 
     return () => window.clearInterval(interval);
-  }, [productImages.length, isImageHovered]);
+  }, [productImages.length]);
 
   // ── Add to cart ──
   const handleAddToCart = async () => {
@@ -194,7 +194,9 @@ export function StoreProductCard({
   };
 
   return (
-    <div className="group relative flex flex-col border border-black rounded-2xl bg-white overflow-hidden transition-shadow duration-200 hover:shadow-lg">
+    <div
+      className="group relative flex flex-col rounded-2xl bg-white overflow-hidden shadow-[0_0_14px_rgba(0,0,0,0.12)] transition-shadow duration-300 hover:shadow-[0_0_26px_rgba(0,0,0,0.22)]"
+    >
 
       {/* ── Tag badge ─────────────────────────────────────── */}
       {tag && (
@@ -225,7 +227,7 @@ export function StoreProductCard({
       >
         {/* Current image — slides out to the left once a new image starts coming in */}
         <div
-          className={`absolute inset-0 transition-transform duration-700 ease-in-out will-change-transform ${
+          className={`absolute inset-0 transition-transform duration-700 ease-in-out will-change-transform group-hover:scale-110 ${
             incomingImg && slideIn ? "-translate-x-full" : "translate-x-0"
           }`}
         >
@@ -235,7 +237,7 @@ export function StoreProductCard({
               alt={title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              className="object-contain p-5 transition duration-300 group-hover:scale-105"
+              className="object-contain p-5"
               onError={() =>
                 setFailedImages((current) =>
                   current.includes(currentImg) ? current : [...current, currentImg]
@@ -248,7 +250,7 @@ export function StoreProductCard({
         {/* Incoming image — starts fully off-screen to the right, glides in slowly */}
         {incomingImg && (
           <div
-            className={`absolute inset-0 transition-transform duration-700 ease-in-out will-change-transform ${
+            className={`absolute inset-0 transition-transform duration-700 ease-in-out will-change-transform group-hover:scale-110 ${
               slideIn ? "translate-x-0" : "translate-x-full"
             }`}
           >
